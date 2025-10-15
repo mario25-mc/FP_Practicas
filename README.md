@@ -1,6 +1,6 @@
 # 💻 FP_Practicas
 
-Este repositorio contiene las prácticas realizadas durante mi formación en **Formación Profesional de Informática**, abarcando diferentes áreas de programación, redes, sistemas y desarrollo de software.
+Este repositorio contiene las prácticas realizadas durante mi formación en **Fundamentos de la Programación**, abarcando los fundamentos de C++.
 
 ---
 
