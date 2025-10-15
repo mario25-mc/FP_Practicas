@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorador de Archivos del Repositorio</title>
+    <meta name="description" content="Una página para explorar los archivos y carpetas de este repositorio.">
+    <style>
+        /* --- Estilos Generales y Diseño Atractivo --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: #f4f7f9;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        /* --- Encabezado --- */
+        header {
+            text-align: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        header h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        /* --- Navegación y Explorador de Archivos --- */
+        #file-explorer {
+            margin-top: 1.5rem;
+        }
+        ul.file-tree {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        ul.file-tree ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .file-tree li {
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            transition: background-color 0.2s;
+        }
+        .file-tree li:hover {
+            background-color: #ecf0f1;
+        }
+        .folder > span {
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .folder > span::before {
+            content: '📁 ';
+            margin-right: 8px;
+        }
+        .file a {
+            text-decoration: none;
+            color: #3498db;
+        }
+        .file a::before {
+            content: '📄 ';
+            margin-right: 8px;
+        }
+        .file a:hover {
+            text-decoration: underline;
+        }
+        /* --- Diseño Adaptable (Responsive) --- */
+        @media (max-width: 600px) {
+            .container {
+                margin: 1rem;
+                padding: 0.5rem;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+        /* --- Pie de Página --- */
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+            color: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Explorador de Archivos del Repositorio</h1>
+            <p>Navega por todas las carpetas y archivos de este proyecto de forma sencilla.</p>
+        </header>
+
+        <main>
+            <section id="file-explorer">
+                <h2>Archivos y Carpetas</h2>
+                <div id="file-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Tu Nombre o Nombre del Proyecto. Todos los derechos reservados.</p>
+        <p>Puedes añadir aquí enlaces a tu <a href="#">GitHub</a>, <a href="#">Contacto</a> o <a href="#">Acerca de</a>.</p>
+    </footer>
+
+    <script>
+        // --- Lógica para mostrar los archivos y carpetas ---
+
+        // IMPORTANTE: Reemplaza este objeto JSON con la estructura de tu repositorio.
+        const fileStructure = {
+            "type": "folder",
+            "name": "Mi Repositorio",
+            "children": [
+                {
+                    "type": "folder",
+                    "name": "src",
+                    "children": [
+                        { "type": "file", "name": "app.js", "path": "src/app.js" },
+                        { "type": "file", "name": "styles.css", "path": "src/styles.css" }
+                    ]
+                },
+                {
+                    "type": "folder",
+                    "name": "docs",
+                    "children": [
+                        { "type": "file", "name": "guide.md", "path": "docs/guide.md" }
+                    ]
+                },
+                { "type": "file", "name": "index.html", "path": "index.html" },
+                { "type": "file", "name": "README.md", "path": "README.md" }
+            ]
+        };
+
+        const fileListContainer = document.getElementById('file-list');
+
+        function createTreeView(node, element) {
+            const ul = document.createElement('ul');
+            ul.className = 'file-tree';
+
+            if (node.children) {
+                node.children.forEach(child => {
+                    const li = document.createElement('li');
+                    if (child.type === 'folder') {
+                        li.className = 'folder';
+                        const span = document.createElement('span');
+                        span.textContent = child.name;
+                        li.appendChild(span);
+
+                        const childUl = createTreeView(child, document.createElement('div'));
+                        childUl.style.display = 'none'; // Ocultar por defecto
+                        li.appendChild(childUl);
+
+                        span.addEventListener('click', () => {
+                            childUl.style.display = childUl.style.display === 'none' ? 'block' : 'none';
+                        });
+                    } else {
+                        li.className = 'file';
+                        const a = document.createElement('a');
+                        a.href = child.path;
+                        a.textContent = child.name;
+                        a.setAttribute('target', '_blank'); // Abrir en nueva pestaña
+                        li.appendChild(a);
+                    }
+                    ul.appendChild(li);
+                });
+            }
+            element.appendChild(ul);
+            return element;
+        }
+
+        createTreeView(fileStructure, fileListContainer);
+    </script>
+</body>
+</html>
