@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorador de Archivos de FP_Practicas</title>
+    <meta name="description" content="Navega por los archivos y carpetas del repositorio FP_Practicas.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+    <style>
+        /* --- Definición de variables de color para temas --- */
+        :root {
+            --font-family: 'Inter', sans-serif;
+            --radius: 12px;
+            --transition-speed: 0.3s;
+
+            /* Tema Claro (por defecto) */
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tema Oscuro */
+        body.dark-mode {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --accent-color: #60a5fa;
+            --accent-hover: #3b82f6;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Estilos Generales --- */
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background-color: var(--bg-secondary);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            transition: background-color var(--transition-speed), border-color var(--transition-speed);
+        }
+
+        /* --- Encabezado y Modo Oscuro --- */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        header {
+            flex-grow: 1;
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Interruptor Modo Oscuro */
+        .theme-switcher {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-primary);
+            border-radius: 20px;
+            padding: 5px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+        }
+        .theme-switcher i {
+            font-size: 14px;
+            padding: 4px;
+            color: var(--text-secondary);
+        }
+        #theme-toggle { display: none; }
+        #theme-toggle:checked + .theme-switcher .fa-moon { display: none; }
+        #theme-toggle:not(:checked) + .theme-switcher .fa-sun { display: none; }
+
+
+        /* --- Explorador de Archivos --- */
+        ul.file-tree {
+            list-style: none;
+            padding-left: 0;
+        }
+        ul.file-tree ul {
+            list-style: none;
+            padding-left: 22px;
+            margin-left: 10px;
+            border-left: 2px solid var(--border-color);
+        }
+        .file-tree li {
+            padding: 12px 15px;
+            margin: 4px 0;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+        .file-tree li:hover {
+            background-color: var(--bg-primary);
+        }
+        .file-tree .folder > span {
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .file-tree i {
+            margin-right: 12px;
+            color: var(--accent-color);
+            width: 20px;
+            text-align: center;
+        }
+        .file-tree .file a {
+            text-decoration: none;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+        }
+        .file-tree .file a:hover {
+            color: var(--accent-hover);
+        }
+
+        /* Visibilidad de carpetas (sistema anterior) */
+        .file-tree .folder ul {
+            display: none;
+        }
+
+        /* --- Pie de Página --- */
+        footer {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-container">
+            <header>
+                <h1>Prácticas de Fundamentos de Programación</h1>
+                <p>Un explorador de archivos para el repositorio.</p>
+            </header>
+            <input type="checkbox" id="theme-toggle">
+            <label for="theme-toggle" class="theme-switcher">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+            </label>
+        </div>
+
+        <main id="file-explorer">
+            <div id="file-list"></div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Mario García. Visita el <a href="https://github.com/mario25-mc/FP_Practicas" target="_blank">Repositorio en GitHub</a>.</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Estructura de archivos con TODOS los archivos incluidos ---
+        const fileStructure = {
+            "name": "FP_Practicas",
+            "type": "folder",
+            "children": [
+                {
+                    "name": "Práctica 3",
+                    "type": "folder",
+                    "children": [
+                        { "name": "I_AjusteTiempo.cpp", "type": "file", "path": "FP_sesion03/I_AjusteTiempo.cpp" },
+                        { "name": "I_Binario_Decimal_4bits.cpp", "type": "file", "path": "FP_sesion03/I_Binario_Decimal_4bits.cpp" },
+                        { "name": "I_Cambio.cpp", "type": "file", "path": "FP_sesion03/I_Cambio.cpp" },
+                        { "name": "I_Desplazamiento_Intervalo.cpp", "type": "file", "path": "FP_sesion03/I_Desplazamiento_Intervalo.cpp" },
+                        { "name": "I_Gaussiana.cpp", "type": "file", "path": "FP_sesion03/I_Gaussiana.cpp" },
+                        { "name": "I_Haversine.cpp", "type": "file", "path": "FP_sesion03/I_Haversine.cpp" },
+                        { "name": "I_RadarTramo.cpp", "type": "file", "path": "FP_sesion03/I_RadarTramo.cpp" },
+                        { "name": "I_TruncaDecimales.cpp", "type": "file", "path": "FP_sesion03/I_TruncaDecimales.cpp" }
+                    ]
+                },
+                {
+                    "name": "Práctica 4",
+                    "type": "folder",
+                    "children": [
+                        { "name": "I_AnalizaLineaIndice.cpp", "type": "file", "path": "FP_sesion04/I_AnalizaLineaIndice.cpp" },
+                        { "name": "I_CifradoRotacion.cpp", "type": "file", "path": "FP_sesion04/I_CifradoRotacion.cpp" },
+                        { "name": "I_Expresiones_Logicas_Simples.cpp", "type": "file", "path": "FP_sesion04/I_Expresiones_Logicas_Simples.cpp" },
+                        { "name": "I_IntercambiaExtremos.cpp", "type": "file", "path": "FP_sesion04/I_IntercambiaExtremos.cpp" },
+                        { "name": "I_Mayuscula_a_Minuscula.cpp", "type": "file", "path": "FP_sesion04/I_Mayuscula_a_Minuscula.cpp" },
+                        { "name": "I_Minuscula_a_Mayuscula.cpp", "type": "file", "path": "FP_sesion04/I_Minuscula_a_Mayuscula.cpp" },
+                        { "name": "I_Valida_12horas.cpp", "type": "file", "path": "FP_sesion04/I_Valida_12horas.cpp" },
+                        { "name": "I_Valida_24horas.cpp", "type": "file", "path": "FP_sesion04/I_Valida_24horas.cpp" }
+                    ]
+                },
+                {
+                    "name": "Práctica 5",
+                    "type": "folder",
+                    "children": [
+                        { "name": "II_Binario_Decimal_4bits_Comp.cpp", "type": "file", "path": "FP_sesion05/II_Binario_Decimal_4bits_Comp.cpp" },
+                        { "name": "II_CifradoRotacion.cpp", "type": "file", "path": "FP_sesion05/II_CifradoRotacion.cpp" },
+                        { "name": "II_Consulta_Multa.cpp", "type": "file", "path": "FP_sesion05/II_Consulta_Multa.cpp" },
+                        { "name": "II_Subida_SalarioPrecario_enum.cpp", "type": "file", "path": "FP_sesion05/II_Subida_SalarioPrecario_enum.cpp" },
+                        { "name": "II_TarifaAerea_Km_Descuentos.cpp", "type": "file", "path": "FP_sesion05/II_TarifaAerea_Km_Descuentos.cpp" },
+                        { "name": "II_Valida_12horas_Comp.cpp", "type": "file", "path": "FP_sesion05/II_Valida_12horas_Comp.cpp" },
+                        { "name": "II_Valida_24horas_Comp.cpp", "type": "file", "path": "FP_sesion05/II_Valida_24horas_Comp.cpp" }
+                    ]
+                },
+                { "name": "README.md", "type": "file", "path": "README.md" },
+                { "name": "index.html", "type": "file", "path": "index.html" }
+            ]
+        };
+
+        const fileListContainer = document.getElementById('file-list');
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function getFileIcon(fileName) {
+            if (fileName.endsWith('.cpp')) return 'fa-brands fa-cuttlefish';
+            if (fileName.endsWith('.html')) return 'fa-solid fa-code';
+            if (fileName.endsWith('.md')) return 'fa-brands fa-markdown';
+            return 'fa-solid fa-file';
+        }
+
+        function createTreeView(node) {
+            const ul = document.createElement('ul');
+            ul.className = 'file-tree';
+
+            if (!node.children) {
+                return ul;
+            }
+
+            node.children.forEach(child => {
+                const li = document.createElement('li');
+                if (child.type === 'folder') {
+                    li.className = 'folder';
+                    const span = document.createElement('span');
+                    span.innerHTML = `<i class="fa-solid fa-folder"></i> ${child.name}`;
+                    li.appendChild(span);
+                    
+                    const childUl = createTreeView(child);
+                    li.appendChild(childUl);
+
+                    span.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        childUl.style.display = childUl.style.display === 'block' ? 'none' : 'block';
+                    });
+
+                } else {
+                    li.className = 'file';
+                    const a = document.createElement('a');
+                    a.href = child.path;
+                    a.target = '_blank';
+                    a.innerHTML = `<i class="${getFileIcon(child.name)}"></i> ${child.name}`;
+                    li.appendChild(a);
+                }
+                ul.appendChild(li);
+            });
+            
+            return ul;
+        }
+
+        // --- Lógica para el Modo Oscuro ---
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.checked = true;
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeToggle.checked = false;
+            }
+        }
+
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const savedTheme = localStorage.getItem('theme');
+
+        applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+        themeToggle.addEventListener('change', () => {
+            const newTheme = themeToggle.checked ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        // Iniciar la creación del explorador de archivos
+        const treeView = createTreeView(fileStructure);
+        fileListContainer.appendChild(treeView);
+    });
+</script>
+</body>
+</html>
