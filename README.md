@@ -8,7 +8,7 @@ Este repositorio contiene las prácticas realizadas durante mi formación en **F
 
 Cada carpeta corresponde a una práctica distinta, con su propio código fuente, documentación y recursos asociados.
 
-> ⚙️ El contenido puede incluir ejercicios en C++, Python, HTML/CSS, Bash u otras tecnologías vistas durante el curso.
+> ⚙️ El contenido puede incluye únicamente ejercicios de C++
 
 ---
 
