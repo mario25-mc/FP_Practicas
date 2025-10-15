@@ -7,7 +7,6 @@
     <meta name="description" content="Navega por los archivos y carpetas del repositorio FP_Practicas.">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
     <style>
@@ -37,7 +36,19 @@
             --border-color: #334155;
             --accent-color: #60a5fa;
             --accent-hover: #3b82f6;
-            --shadow-color: rgba(0, 0, 0, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.15);
+        }
+
+        /* --- Animaciones --- */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* --- Estilos Generales --- */
@@ -58,14 +69,14 @@
             box-shadow: 0 10px 30px var(--shadow-color);
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
+            animation: fadeInSlideUp 0.6s ease-out forwards;
         }
 
-        /* --- Encabezado y Modo Oscuro --- */
+        /* --- Encabezado --- */
         .header-container {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            text-align: center;
+            align-items: center;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 2rem;
             margin-bottom: 2rem;
@@ -73,6 +84,7 @@
 
         header {
             flex-grow: 1;
+            text-align: left;
         }
         
         header h1 {
@@ -87,25 +99,68 @@
             margin-top: 0.5rem;
         }
 
-        /* Interruptor Modo Oscuro */
+        /* --- Interruptor de Tema --- */
+        #theme-toggle { display: none; }
+
         .theme-switcher {
-            display: flex;
-            align-items: center;
+            position: relative;
+            width: 60px;
+            height: 32px;
             background-color: var(--bg-primary);
-            border-radius: 20px;
-            padding: 5px;
+            border-radius: 16px;
+            padding: 2px;
             cursor: pointer;
             border: 1px solid var(--border-color);
+            transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
-        .theme-switcher i {
-            font-size: 14px;
-            padding: 4px;
-            color: var(--text-secondary);
+        
+        .theme-switcher .slider {
+            position: absolute;
+            /* ⬇️ AJUSTE DE CENTRADO VERTICAL ⬇️ */
+            top: 50%;
+            transform: translateY(-50%);
+            /* ⬆️ FIN DEL AJUSTE ⬆️ */
+            left: 2px;
+            width: 28px;
+            height: 28px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color var(--transition-speed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        #theme-toggle { display: none; }
-        #theme-toggle:checked + .theme-switcher .fa-moon { display: none; }
-        #theme-toggle:not(:checked) + .theme-switcher .fa-sun { display: none; }
 
+        #theme-toggle:checked + .theme-switcher .slider {
+            /* ⬇️ AJUSTE DE CENTRADO VERTICAL (ESTADO ACTIVADO) ⬇️ */
+            transform: translateY(-50%) translateX(28px);
+            /* ⬆️ FIN DEL AJUSTE ⬆️ */
+        }
+
+        .theme-switcher .slider i {
+            position: absolute;
+            font-size: 16px;
+            color: var(--bg-secondary);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .theme-switcher .slider .fa-sun {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+        .theme-switcher .slider .fa-moon {
+            opacity: 0;
+            transform: rotate(-90deg);
+        }
+
+        #theme-toggle:checked + .theme-switcher .slider .fa-sun {
+            opacity: 0;
+            transform: rotate(90deg);
+        }
+        #theme-toggle:checked + .theme-switcher .slider .fa-moon {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
 
         /* --- Explorador de Archivos --- */
         ul.file-tree {
@@ -115,17 +170,30 @@
         ul.file-tree ul {
             list-style: none;
             padding-left: 22px;
-            margin-left: 10px;
+            margin-left: 18px;
             border-left: 2px solid var(--border-color);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, margin-top 0.4s ease-in-out;
+            margin-top: 0;
         }
+
+        .file-tree .folder.open > ul {
+            max-height: 1000px;
+            margin-top: 8px;
+        }
+
         .file-tree li {
             padding: 12px 15px;
             margin: 4px 0;
             border-radius: 8px;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.2s;
+            opacity: 0;
+            animation: fadeInSlideUp 0.5s ease-out forwards;
         }
         .file-tree li:hover {
             background-color: var(--bg-primary);
+            transform: translateX(5px);
         }
         .file-tree .folder > span {
             font-weight: 500;
@@ -133,6 +201,18 @@
             display: flex;
             align-items: center;
         }
+
+        .folder-toggle-icon {
+            transition: transform 0.3s ease;
+            color: var(--text-secondary);
+            width: 20px;
+            text-align: center;
+            margin-left: -5px;
+        }
+        .file-tree .folder.open > span .folder-toggle-icon {
+            transform: rotate(90deg);
+        }
+
         .file-tree i {
             margin-right: 12px;
             color: var(--accent-color);
@@ -144,14 +224,10 @@
             color: var(--text-primary);
             display: flex;
             align-items: center;
+            transition: color 0.2s;
         }
         .file-tree .file a:hover {
             color: var(--accent-hover);
-        }
-
-        /* Visibilidad de carpetas (sistema anterior) */
-        .file-tree .folder ul {
-            display: none;
         }
 
         /* --- Pie de Página --- */
@@ -180,11 +256,15 @@
                 <h1>Prácticas de Fundamentos de Programación</h1>
                 <p>Un explorador de archivos para el repositorio.</p>
             </header>
+            
             <input type="checkbox" id="theme-toggle">
             <label for="theme-toggle" class="theme-switcher">
-                <i class="fas fa-sun"></i>
-                <i class="fas fa-moon"></i>
+                <span class="slider">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </span>
             </label>
+
         </div>
 
         <main id="file-explorer">
@@ -198,7 +278,6 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // --- Estructura de archivos con TODOS los archivos incluidos ---
         const fileStructure = {
             "name": "FP_Practicas",
             "type": "folder",
@@ -267,12 +346,14 @@
                 return ul;
             }
 
-            node.children.forEach(child => {
+            node.children.forEach((child, index) => {
                 const li = document.createElement('li');
+                li.style.animationDelay = `${index * 40}ms`;
+
                 if (child.type === 'folder') {
                     li.className = 'folder';
                     const span = document.createElement('span');
-                    span.innerHTML = `<i class="fa-solid fa-folder"></i> ${child.name}`;
+                    span.innerHTML = `<i class="fa-solid fa-chevron-right folder-toggle-icon"></i><i class="fa-solid fa-folder"></i> ${child.name}`;
                     li.appendChild(span);
                     
                     const childUl = createTreeView(child);
@@ -280,7 +361,7 @@
 
                     span.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        childUl.style.display = childUl.style.display === 'block' ? 'none' : 'block';
+                        li.classList.toggle('open');
                     });
 
                 } else {
@@ -297,7 +378,6 @@
             return ul;
         }
 
-        // --- Lógica para el Modo Oscuro ---
         function applyTheme(theme) {
             if (theme === 'dark') {
                 document.body.classList.add('dark-mode');
@@ -319,10 +399,9 @@
             applyTheme(newTheme);
         });
 
-        // Iniciar la creación del explorador de archivos
         const treeView = createTreeView(fileStructure);
         fileListContainer.appendChild(treeView);
     });
-</script>
+    </script>
 </body>
 </html>
