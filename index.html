@@ -3,303 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explorador de Archivos del Repositorio</title>
-    <meta name="description" content="Una página para explorar los archivos y carpetas de este repositorio.">
+    <title>Explorador de Archivos de FP_Practicas</title>
+    <meta name="description" content="Navega por los archivos y carpetas del repositorio FP_Practicas.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
     <style>
-        /* --- Estilos Generales y Diseño Atractivo --- */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            background-color: #f4f7f9;
-            color: #333;
+        /* --- Definición de variables de color para temas --- */
+        :root {
+            --font-family: 'Inter', sans-serif;
+            --radius: 12px;
+            --transition-speed: 0.3s;
+
+            /* Tema Claro (por defecto) */
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --shadow-color: rgba(0, 0, 0, 0.05);
         }
+
+        /* Tema Oscuro */
+        body.dark-mode {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --accent-color: #60a5fa;
+            --accent-hover: #3b82f6;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Estilos Generales --- */
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
         .container {
             max-width: 900px;
             margin: 2rem auto;
-            padding: 1rem;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 2.5rem;
+            background-color: var(--bg-secondary);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
-        /* --- Encabezado --- */
-        header {
+
+        /* --- Encabezado y Modo Oscuro --- */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             text-align: center;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
         }
+
+        header {
+            flex-grow: 1;
+        }
+        
         header h1 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0;
         }
+        
         header p {
-            color: #7f8c8d;
+            color: var(--text-secondary);
             font-size: 1.1rem;
+            margin-top: 0.5rem;
         }
-        /* --- Navegación y Explorador de Archivos --- */
-        #file-explorer {
-            margin-top: 1.5rem;
+
+        /* Interruptor Modo Oscuro */
+        .theme-switcher {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-primary);
+            border-radius: 20px;
+            padding: 5px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
         }
+        .theme-switcher i {
+            font-size: 14px;
+            padding: 4px;
+            color: var(--text-secondary);
+        }
+        #theme-toggle { display: none; }
+        #theme-toggle:checked + .theme-switcher .fa-moon { display: none; }
+        #theme-toggle:not(:checked) + .theme-switcher .fa-sun { display: none; }
+
+
+        /* --- Explorador de Archivos --- */
         ul.file-tree {
-            list-style-type: none;
+            list-style: none;
             padding-left: 0;
         }
         ul.file-tree ul {
-            list-style-type: none;
-            padding-left: 20px;
+            list-style: none;
+            padding-left: 22px;
+            margin-left: 10px;
+            border-left: 2px solid var(--border-color);
         }
         .file-tree li {
-            padding: 8px 12px;
-            border-radius: 5px;
-            margin-bottom: 5px;
+            padding: 12px 15px;
+            margin: 4px 0;
+            border-radius: 8px;
             transition: background-color 0.2s;
         }
         .file-tree li:hover {
-            background-color: #ecf0f1;
+            background-color: var(--bg-primary);
         }
-        .folder > span {
-            font-weight: bold;
+        .file-tree .folder > span {
+            font-weight: 500;
             cursor: pointer;
+            display: flex;
+            align-items: center;
         }
-        .folder > span::before {
-            content: '📁 ';
-            margin-right: 8px;
+        .file-tree i {
+            margin-right: 12px;
+            color: var(--accent-color);
+            width: 20px;
+            text-align: center;
         }
-        .file a {
+        .file-tree .file a {
             text-decoration: none;
-            color: #3498db;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
         }
-        .file a::before {
-            content: '📄 ';
-            margin-right: 8px;
+        .file-tree .file a:hover {
+            color: var(--accent-hover);
         }
-        .file a:hover {
-            text-decoration: underline;
+
+        /* Visibilidad de carpetas (sistema anterior) */
+        .file-tree .folder ul {
+            display: none;
         }
-        /* --- Diseño Adaptable (Responsive) --- */
-        @media (max-width: 600px) {
-            .container {
-                margin: 1rem;
-                padding: 0.5rem;
-            }
-            header h1 {
-                font-size: 1.8rem;
-            }
-        }
+
         /* --- Pie de Página --- */
         footer {
             text-align: center;
+            padding-top: 2rem;
             margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e0e0e0;
-            font-size: 0.9rem;
-            color: #95a5a6;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <header>
-            <h1>Explorador de Archivos del Repositorio</h1>
-            <p>Navega por todas las carpetas y archivos de este proyecto de forma sencilla.</p>
-        </header>
+        <div class="header-container">
+            <header>
+                <h1>Prácticas de Fundamentos de Programación</h1>
+                <p>Un explorador de archivos para el repositorio.</p>
+            </header>
+            <input type="checkbox" id="theme-toggle">
+            <label for="theme-toggle" class="theme-switcher">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+            </label>
+        </div>
 
-        <main>
-            <section id="file-explorer">
-                <h2>Archivos y Carpetas</h2>
-                <div id="file-list"></div>
-            </section>
+        <main id="file-explorer">
+            <div id="file-list"></div>
         </main>
     </div>
 
     <footer>
-        <p>&copy; 2025 Tu Nombre o Nombre del Proyecto. Todos los derechos reservados.</p>
-        <p>Puedes añadir aquí enlaces a tu <a href="#">GitHub</a>, <a href="#">Contacto</a> o <a href="#">Acerca de</a>.</p>
+        <p>&copy; 2025 Mario García. Visita el <a href="https://github.com/mario25-mc/FP_Practicas" target="_blank">Repositorio en GitHub</a>.</p>
     </footer>
 
     <script>
-        // --- Lógica para mostrar los archivos y carpetas ---
-
-        // IMPORTANTE: Reemplaza este objeto JSON con la estructura de tu repositorio.
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Estructura de archivos con TODOS los archivos incluidos ---
         const fileStructure = {
-    "name": "FP_Practicas",
-    "type": "folder",
-    "children": [
-        {
-            "name": "FP_sesion03",
+            "name": "FP_Practicas",
             "type": "folder",
             "children": [
                 {
-                    "name": "I_AjusteTiempo.cpp",
-                    "type": "file",
-                    "path": "FP_sesion03/I_AjusteTiempo.cpp"
+                    "name": "Práctica 3",
+                    "type": "folder",
+                    "children": [
+                        { "name": "I_AjusteTiempo.cpp", "type": "file", "path": "FP_sesion03/I_AjusteTiempo.cpp" },
+                        { "name": "I_Binario_Decimal_4bits.cpp", "type": "file", "path": "FP_sesion03/I_Binario_Decimal_4bits.cpp" },
+                        { "name": "I_Cambio.cpp", "type": "file", "path": "FP_sesion03/I_Cambio.cpp" },
+                        { "name": "I_Desplazamiento_Intervalo.cpp", "type": "file", "path": "FP_sesion03/I_Desplazamiento_Intervalo.cpp" },
+                        { "name": "I_Gaussiana.cpp", "type": "file", "path": "FP_sesion03/I_Gaussiana.cpp" },
+                        { "name": "I_Haversine.cpp", "type": "file", "path": "FP_sesion03/I_Haversine.cpp" },
+                        { "name": "I_RadarTramo.cpp", "type": "file", "path": "FP_sesion03/I_RadarTramo.cpp" },
+                        { "name": "I_TruncaDecimales.cpp", "type": "file", "path": "FP_sesion03/I_TruncaDecimales.cpp" }
+                    ]
                 },
                 {
-                    "name": "I_Binario_Decimal_4bits.cpp",
-                    "type": "file",
-                    "path": "FP_sesion03/I_Binario_Decimal_4bits.cpp"
+                    "name": "Práctica 4",
+                    "type": "folder",
+                    "children": [
+                        { "name": "I_AnalizaLineaIndice.cpp", "type": "file", "path": "FP_sesion04/I_AnalizaLineaIndice.cpp" },
+                        { "name": "I_CifradoRotacion.cpp", "type": "file", "path": "FP_sesion04/I_CifradoRotacion.cpp" },
+                        { "name": "I_Expresiones_Logicas_Simples.cpp", "type": "file", "path": "FP_sesion04/I_Expresiones_Logicas_Simples.cpp" },
+                        { "name": "I_IntercambiaExtremos.cpp", "type": "file", "path": "FP_sesion04/I_IntercambiaExtremos.cpp" },
+                        { "name": "I_Mayuscula_a_Minuscula.cpp", "type": "file", "path": "FP_sesion04/I_Mayuscula_a_Minuscula.cpp" },
+                        { "name": "I_Minuscula_a_Mayuscula.cpp", "type": "file", "path": "FP_sesion04/I_Minuscula_a_Mayuscula.cpp" },
+                        { "name": "I_Valida_12horas.cpp", "type": "file", "path": "FP_sesion04/I_Valida_12horas.cpp" },
+                        { "name": "I_Valida_24horas.cpp", "type": "file", "path": "FP_sesion04/I_Valida_24horas.cpp" }
+                    ]
                 },
                 {
-                    "name": "I_Cambio.cpp",
-                    "type": "file",
-                    "path": "FP_sesion03/I_Cambio.cpp"
+                    "name": "Práctica 5",
+                    "type": "folder",
+                    "children": [
+                        { "name": "II_Binario_Decimal_4bits_Comp.cpp", "type": "file", "path": "FP_sesion05/II_Binario_Decimal_4bits_Comp.cpp" },
+                        { "name": "II_CifradoRotacion.cpp", "type": "file", "path": "FP_sesion05/II_CifradoRotacion.cpp" },
+                        { "name": "II_Consulta_Multa.cpp", "type": "file", "path": "FP_sesion05/II_Consulta_Multa.cpp" },
+                        { "name": "II_Subida_SalarioPrecario_enum.cpp", "type": "file", "path": "FP_sesion05/II_Subida_SalarioPrecario_enum.cpp" },
+                        { "name": "II_TarifaAerea_Km_Descuentos.cpp", "type": "file", "path": "FP_sesion05/II_TarifaAerea_Km_Descuentos.cpp" },
+                        { "name": "II_Valida_12horas_Comp.cpp", "type": "file", "path": "FP_sesion05/II_Valida_12horas_Comp.cpp" },
+                        { "name": "II_Valida_24horas_Comp.cpp", "type": "file", "path": "FP_sesion05/II_Valida_24horas_Comp.cpp" }
+                    ]
                 },
-                {
-                    "name": "I_Desplazamiento_Intervalo.cpp",
-                    "type": "file",
-                    "path": "FP_sesion03/I_Desplazamiento_Intervalo.cpp"
-                },
-                {
-                    "name": "I_Gaussiana.cpp",
-                    "type": "file",
-                    "path": "FP_sesion03/I_Gaussiana.cpp"
-                },
-                {
-                    "name": "I_Haversine.cpp",
-                    "type": "file",
-                    "path": "FP_sesion03/I_Haversine.cpp"
-                },
-                {
-                    "name": "I_RadarTramo.cpp",
-                    "type": "file",
-                    "path": "FP_sesion03/I_RadarTramo.cpp"
-                },
-                {
-                    "name": "I_TruncaDecimales.cpp",
-                    "type": "file",
-                    "path": "FP_sesion03/I_TruncaDecimales.cpp"
-                }
+                { "name": "README.md", "type": "file", "path": "README.md" },
+                { "name": "index.html", "type": "file", "path": "index.html" }
             ]
-        },
-        {
-            "name": "FP_sesion04",
-            "type": "folder",
-            "children": [
-                {
-                    "name": "I_AnalizaLineaIndice.cpp",
-                    "type": "file",
-                    "path": "FP_sesion04/I_AnalizaLineaIndice.cpp"
-                },
-                {
-                    "name": "I_CifradoRotacion.cpp",
-                    "type": "file",
-                    "path": "FP_sesion04/I_CifradoRotacion.cpp"
-                },
-                {
-                    "name": "I_Expresiones_Logicas_Simples.cpp",
-                    "type": "file",
-                    "path": "FP_sesion04/I_Expresiones_Logicas_Simples.cpp"
-                },
-                {
-                    "name": "I_IntercambiaExtremos.cpp",
-                    "type": "file",
-                    "path": "FP_sesion04/I_IntercambiaExtremos.cpp"
-                },
-                {
-                    "name": "I_Mayuscula_a_Minuscula.cpp",
-                    "type": "file",
-                    "path": "FP_sesion04/I_Mayuscula_a_Minuscula.cpp"
-                },
-                {
-                    "name": "I_Minuscula_a_Mayuscula.cpp",
-                    "type": "file",
-                    "path": "FP_sesion04/I_Minuscula_a_Mayuscula.cpp"
-                },
-                {
-                    "name": "I_Valida_12horas.cpp",
-                    "type": "file",
-                    "path": "FP_sesion04/I_Valida_12horas.cpp"
-                },
-                {
-                    "name": "I_Valida_24horas.cpp",
-                    "type": "file",
-                    "path": "FP_sesion04/I_Valida_24horas.cpp"
-                }
-            ]
-        },
-        {
-            "name": "FP_sesion05",
-            "type": "folder",
-            "children": [
-                {
-                    "name": "II_Binario_Decimal_4bits_Comp.cpp",
-                    "type": "file",
-                    "path": "FP_sesion05/II_Binario_Decimal_4bits_Comp.cpp"
-                },
-                {
-                    "name": "II_CifradoRotacion.cpp",
-                    "type": "file",
-                    "path": "FP_sesion05/II_CifradoRotacion.cpp"
-                },
-                {
-                    "name": "II_Consulta_Multa.cpp",
-                    "type": "file",
-                    "path": "FP_sesion05/II_Consulta_Multa.cpp"
-                },
-                {
-                    "name": "II_Subida_SalarioPrecario_enum.cpp",
-                    "type": "file",
-                    "path": "FP_sesion05/II_Subida_SalarioPrecario_enum.cpp"
-                },
-                {
-                    "name": "II_TarifaAerea_Km_Descuentos.cpp",
-                    "type": "file",
-                    "path": "FP_sesion05/II_TarifaAerea_Km_Descuentos.cpp"
-                },
-                {
-                    "name": "II_Valida_12horas_Comp.cpp",
-                    "type": "file",
-                    "path": "FP_sesion05/II_Valida_12horas_Comp.cpp"
-                },
-                {
-                    "name": "II_Valida_24horas_Comp.cpp",
-                    "type": "file",
-                    "path": "FP_sesion05/II_Valida_24horas_Comp.cpp"
-                }
-            ]
-        }
-    ]
-};
+        };
 
         const fileListContainer = document.getElementById('file-list');
+        const themeToggle = document.getElementById('theme-toggle');
 
-        function createTreeView(node, element) {
+        function getFileIcon(fileName) {
+            if (fileName.endsWith('.cpp')) return 'fa-brands fa-cuttlefish';
+            if (fileName.endsWith('.html')) return 'fa-solid fa-code';
+            if (fileName.endsWith('.md')) return 'fa-brands fa-markdown';
+            return 'fa-solid fa-file';
+        }
+
+        function createTreeView(node) {
             const ul = document.createElement('ul');
             ul.className = 'file-tree';
 
-            if (node.children) {
-                node.children.forEach(child => {
-                    const li = document.createElement('li');
-                    if (child.type === 'folder') {
-                        li.className = 'folder';
-                        const span = document.createElement('span');
-                        span.textContent = child.name;
-                        li.appendChild(span);
-
-                        const childUl = createTreeView(child, document.createElement('div'));
-                        childUl.style.display = 'none'; // Ocultar por defecto
-                        li.appendChild(childUl);
-
-                        span.addEventListener('click', () => {
-                            childUl.style.display = childUl.style.display === 'none' ? 'block' : 'none';
-                        });
-                    } else {
-                        li.className = 'file';
-                        const a = document.createElement('a');
-                        a.href = child.path;
-                        a.textContent = child.name;
-                        a.setAttribute('target', '_blank'); // Abrir en nueva pestaña
-                        li.appendChild(a);
-                    }
-                    ul.appendChild(li);
-                });
+            if (!node.children) {
+                return ul;
             }
-            element.appendChild(ul);
-            return element;
+
+            node.children.forEach(child => {
+                const li = document.createElement('li');
+                if (child.type === 'folder') {
+                    li.className = 'folder';
+                    const span = document.createElement('span');
+                    span.innerHTML = `<i class="fa-solid fa-folder"></i> ${child.name}`;
+                    li.appendChild(span);
+                    
+                    const childUl = createTreeView(child);
+                    li.appendChild(childUl);
+
+                    span.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        childUl.style.display = childUl.style.display === 'block' ? 'none' : 'block';
+                    });
+
+                } else {
+                    li.className = 'file';
+                    const a = document.createElement('a');
+                    a.href = child.path;
+                    a.target = '_blank';
+                    a.innerHTML = `<i class="${getFileIcon(child.name)}"></i> ${child.name}`;
+                    li.appendChild(a);
+                }
+                ul.appendChild(li);
+            });
+            
+            return ul;
         }
 
-        createTreeView(fileStructure, fileListContainer);
-    </script>
+        // --- Lógica para el Modo Oscuro ---
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.checked = true;
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeToggle.checked = false;
+            }
+        }
+
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const savedTheme = localStorage.getItem('theme');
+
+        applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+        themeToggle.addEventListener('change', () => {
+            const newTheme = themeToggle.checked ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        // Iniciar la creación del explorador de archivos
+        const treeView = createTreeView(fileStructure);
+        fileListContainer.appendChild(treeView);
+    });
+</script>
 </body>
 </html>
