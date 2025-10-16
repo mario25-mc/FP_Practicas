@@ -3,7 +3,7 @@
 //
 // MARIO MARTINEZ CALLEJON
 //
-// SESION 04
+// SESION 05
 /*
     Programa que lee una cadena de caracteres que indica una hora en formato
     horario de 12 horas e indica si es correcta o no usando condicionales para

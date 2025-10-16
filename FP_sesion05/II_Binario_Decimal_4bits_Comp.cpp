@@ -3,7 +3,7 @@
 //
 // MARIO MARTINEZ CALLEJON
 //
-// SESION 03
+// SESION 05
 /*
     Programa que convierte un número binario de 4 cifras a su valor decimal. El
     programa comprueba que el número introducido es de 4 cifras.

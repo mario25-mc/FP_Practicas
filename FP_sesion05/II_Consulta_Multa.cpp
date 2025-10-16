@@ -3,7 +3,7 @@
 //
 // MARIO MARTINEZ CALLEJON
 //
-// SESION 04
+// SESION 05
 /*
 	Programa que calcula la velocidad imputada según el tipo de radar (fijo o 
     móvil) y determina la sanción correspondiente en una autovía con límite de 

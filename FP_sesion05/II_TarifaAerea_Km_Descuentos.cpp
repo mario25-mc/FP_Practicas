@@ -3,7 +3,7 @@
 //
 // MARIO MARTINEZ CALLEJON
 //
-// SESION 04
+// SESION 05
 /*
 Programa que calcula el precio final de un billete de avión en función de la 
 distancia recorrida y los puntos de fidelización del cliente. Se aplican 

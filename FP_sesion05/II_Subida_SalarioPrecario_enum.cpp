@@ -3,7 +3,7 @@
 //
 // MARIO MARTINEZ CALLEJON
 //
-// SESION 04
+// SESION 05
 /*
 	Programa que lee la edad y el salario de una persona y aplica subidas al 
     salario según condiciones: 4% si la edad es mayor de 65 o menor de 35 años. 
