@@ -18,7 +18,6 @@
 */
 /***************************************************************************/
 
-
 #include <iostream>
 #include <iomanip>
 
@@ -31,11 +30,40 @@ int main() {
     // Constantes
     const int EDAD_MAYOR = 65;
     const int EDAD_MENOR = 35;
-    const double SUBIDA_PRINCIPAL = 0.04;
-    const double SALARIO_LIMITE_BAJO = 300.0;
-    const double SUBIDA_EXTRA_BAJA = 0.03;
-    const double SALARIO_LIMITE_ALTO = 900.0;
-    const double SUBIDA_EXTRA_MEDIA = 0.015;
+
+    const double SUBIDA_PRINCIPAL = 4;
+
+    const double LIMITE_SALARIO_MUY_BAJO = 300.0;
+    const double SUBIDA_EXTRA_BAJA = 3;
+
+    const double LIMITE_SALARIO_BAJO = 900.0;
+    const double SUBIDA_EXTRA_MEDIA = 1.5;
+
+    //Declaracion de valores para los tipos enumerados
+    enum class Edad {
+        joven,
+        adulto,
+        senior
+    };
+
+    enum class Salario {
+        muy_bajo,
+        bajo,
+        normal
+    };
+
+    // Enum to report which subida was applied
+    enum class Subida {
+        ninguna,
+        subida_edad,
+        subida_maxima,
+        subida_media
+    };
+
+    //Bool de comprobacion de entrada
+    bool edad_ok = false;
+    bool salario_ok = false;
+    bool entrada_ok = false;
 
     // Entrada
     int edad;
@@ -44,58 +72,110 @@ int main() {
     cout << endl;
     cout << "Introduzca la edad: ";
     cin >> edad;
-    cout << "Introduzca el salario: ";
-    cin >> salario;
-    cout << endl;
 
-    //Declaracion de valores para el tipo enumerado Subida
-    enum class Subida {
-        ninguna,
-        subida_edad,
-        subida_media,
-        subida_maxima
-    };
+    edad_ok = (edad >= 0);
 
-    double salario_final = salario;
-    Subida subida_usuario = Subida::ninguna;
+    if (edad_ok) {
+        cout << "Introduzca el salario: ";
+        cin >> salario;
 
-    // Subida del 4%
-    if (edad > EDAD_MAYOR || edad < EDAD_MENOR) {
-        salario_final += salario * SUBIDA_PRINCIPAL;
-        subida_usuario = Subida::subida_edad;
+        salario_ok = (salario >= 0);
+    }
 
-        // Subidas adicionales
-        if (salario < SALARIO_LIMITE_BAJO) {
-            salario_final += salario * SUBIDA_EXTRA_BAJA;
-            subida_usuario = Subida::subida_maxima;
+    entrada_ok = (edad_ok && salario_ok);
 
-        } else if (salario >= SALARIO_LIMITE_BAJO && 
-                   salario < SALARIO_LIMITE_ALTO) {
-            salario_final += salario * SUBIDA_EXTRA_MEDIA;
-            subida_usuario = Subida::subida_media;
+    if (entrada_ok) {
+        double salario_final = salario;
+        Edad edad_usuario = Edad::adulto; // default
+        Salario salario_usuario = Salario::normal; // default
+        Subida subida_usuario = Subida::ninguna;
+
+        // Determinar edad_usuario
+        if (edad < EDAD_MENOR) {
+            edad_usuario = Edad::joven;
+        } else if (edad > EDAD_MAYOR) {
+            edad_usuario = Edad::senior;
+        } else {
+            edad_usuario = Edad::adulto;
+        }
+
+        // Determinar salario_usuario 
+        if (salario < LIMITE_SALARIO_MUY_BAJO) {
+            salario_usuario = Salario::muy_bajo;
+        } else if (salario < LIMITE_SALARIO_BAJO) {
+            salario_usuario = Salario::bajo;
+        } else {
+            salario_usuario = Salario::normal;
+        }
+
+        //Aplicar subidas de salario
+        if (edad_usuario == Edad::joven || edad_usuario == Edad::joven) {
+            salario_final += salario * (SUBIDA_PRINCIPAL / 100);
+
+            //Aplicar descuentos extras
+            if (salario_usuario == Salario::muy_bajo) {
+                salario_final += salario * (SUBIDA_EXTRA_BAJA / 100);
+            } else if (salario_usuario == Salario::bajo) {
+                salario_final += salario * (SUBIDA_EXTRA_MEDIA / 100);
+            }
+        }
+
+        // Salida
+        cout << fixed << setprecision(2);
+        cout << endl;
+        cout << "Salario final: " << salario_final << " euros." << endl;
+        cout << endl;
+
+        cout << fixed << setprecision(1);
+        switch (edad_usuario) {
+        case Edad::joven:
+            cout << "Se ha aplicado una subida del " << SUBIDA_PRINCIPAL 
+                << "% por ser menor de " << EDAD_MENOR << " años.";
+            break;
+        
+        case Edad::senior:
+            cout << "Se ha aplicado una subida del " << SUBIDA_PRINCIPAL 
+                << "% por ser mayor de " << EDAD_MAYOR << " años.";
+            break;
+
+        default:
+            cout << "No se aplica ninguna subida.";
+            break;
+        }
+
+        cout << endl;
+
+        if (edad_usuario == Edad::joven || edad_usuario == Edad::senior) {
+            cout << endl;
+            
+            switch (salario_usuario) {
+            case Salario::muy_bajo:
+                cout << "Se ha aplicado una subida del " << SUBIDA_EXTRA_BAJA << 
+                        "% por tener un salario menor que " << 
+                        LIMITE_SALARIO_MUY_BAJO << " euros.";
+                break;
+
+            case Salario::bajo:
+                cout << "Se ha aplicado una subida del " << SUBIDA_EXTRA_MEDIA << 
+                        "% por tener un salario menor que " << LIMITE_SALARIO_BAJO
+                    << " euros.";
+                break;
+            }
+        }
+        
+    } else {
+        cout << endl;
+        if (!edad_ok) {
+            cout << "La edad debe ser positiva" << endl;
+        } else {
+            cout << "El salario debe ser positivo" << endl;
         }
     }
 
-    // Salida
-    cout << "Salario final: " << salario_final << " euros." << endl;
-    cout << "Subidas aplicadas: ";
-    switch (subida_usuario) {
-        case Subida::ninguna:
-            cout << "Ninguna.";
-            break;
-        case Subida::subida_edad:
-            cout << "4%.";
-            break;
-        case Subida::subida_maxima:
-            cout << "4% y 3%.";
-            break;
-        case Subida::subida_media:
-            cout << "4% y 1.5%.";
-            break;
-    }
     cout << endl;
 
     return 0;
 }
+
 /***************************************************************************/
 /***************************************************************************/
