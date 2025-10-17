@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explorador de Archivos de FP_Practicas</title>
-    <meta name="description" content="Navega por los archivos y carpetas del repositorio FP_Practicas.">
+    <meta name="description" content="Navega por los archivos y carpetas del repositorio FP_Practicas en tiempo real.">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
@@ -50,6 +50,11 @@
                 transform: translateY(0);
             }
         }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
 
         /* --- Estilos Generales --- */
         body {
@@ -187,8 +192,10 @@
             margin: 4px 0;
             border-radius: 8px;
             transition: background-color 0.2s, transform 0.2s;
-            opacity: 0;
-            animation: fadeInSlideUp 0.5s ease-out forwards;
+        }
+        .file-tree li.animated {
+             opacity: 0;
+             animation: fadeInSlideUp 0.5s ease-out forwards;
         }
         .file-tree li:hover {
             background-color: var(--bg-primary);
@@ -228,6 +235,20 @@
         .file-tree .file a:hover {
             color: var(--accent-hover);
         }
+        
+        /* Estilos para el estado de carga y error */
+        .status-message {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        .status-message .spinner {
+            animation: spin 1s linear infinite;
+            margin-right: 12px;
+        }
 
         /* --- Pie de Página --- */
         footer {
@@ -246,32 +267,27 @@
             text-decoration: underline;
         }
 
-        /* --- ⬇️ DISEÑO RESPONSIVO PARA MÓVILES ⬇️ --- */
+        /* --- Diseño Responsivo --- */
         @media (max-width: 700px) {
             .container {
-                /* Reducir márgenes y padding en pantallas pequeñas */
                 margin: 1rem;
                 padding: 1.5rem;
             }
 
             .header-container {
-                /* Apilar el título y el botón verticalmente */
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 1.5rem; /* Añadir espacio entre los elementos apilados */
+                gap: 1.5rem;
             }
 
             header h1 {
-                /* Reducir el tamaño del título */
                 font-size: 1.8rem;
             }
 
             header p {
-                /* Reducir el tamaño del subtítulo */
                 font-size: 1rem;
             }
         }
-        /* --- ⬆️ FIN DEL DISEÑO RESPONSIVO ⬆️ --- */
 
     </style>
 </head>
@@ -295,68 +311,96 @@
         </div>
 
         <main id="file-explorer">
-            <div id="file-list"></div>
+            <div id="file-list">
+                <!-- El contenido se generará dinámicamente aquí -->
+            </div>
         </main>
     </div>
 
     <footer>
-        <p>&copy; 2025 Mario Martínez. Visita el <a href="https://github.com/mario25-mc/FP_Practicas" target="_blank">Repositorio en GitHub</a>.</p>
+        <p>&copy; 2025 Mario García. Visita el <a href="https://github.com/mario25-mc/FP_Practicas" target="_blank">Repositorio en GitHub</a>.</p>
     </footer>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const fileStructure = {
-            "name": "FP_Practicas",
-            "type": "folder",
-            "children": [
-                {
-                    "name": "Práctica 3",
-                    "type": "folder",
-                    "children": [
-                        { "name": "I_AjusteTiempo.cpp", "type": "file", "path": "FP_sesion03/I_AjusteTiempo.cpp" },
-                        { "name": "I_Binario_Decimal_4bits.cpp", "type": "file", "path": "FP_sesion03/I_Binario_Decimal_4bits.cpp" },
-                        { "name": "I_Cambio.cpp", "type": "file", "path": "FP_sesion03/I_Cambio.cpp" },
-                        { "name": "I_Desplazamiento_Intervalo.cpp", "type": "file", "path": "FP_sesion03/I_Desplazamiento_Intervalo.cpp" },
-                        { "name": "I_Gaussiana.cpp", "type": "file", "path": "FP_sesion03/I_Gaussiana.cpp" },
-                        { "name": "I_Haversine.cpp", "type": "file", "path": "FP_sesion03/I_Haversine.cpp" },
-                        { "name": "I_RadarTramo.cpp", "type": "file", "path": "FP_sesion03/I_RadarTramo.cpp" },
-                        { "name": "I_TruncaDecimales.cpp", "type": "file", "path": "FP_sesion03/I_TruncaDecimales.cpp" }
-                    ]
-                },
-                {
-                    "name": "Práctica 4",
-                    "type": "folder",
-                    "children": [
-                        { "name": "I_AnalizaLineaIndice.cpp", "type": "file", "path": "FP_sesion04/I_AnalizaLineaIndice.cpp" },
-                        { "name": "I_CifradoRotacion.cpp", "type": "file", "path": "FP_sesion04/I_CifradoRotacion.cpp" },
-                        { "name": "I_Expresiones_Logicas_Simples.cpp", "type": "file", "path": "FP_sesion04/I_Expresiones_Logicas_Simples.cpp" },
-                        { "name": "I_IntercambiaExtremos.cpp", "type": "file", "path": "FP_sesion04/I_IntercambiaExtremos.cpp" },
-                        { "name": "I_Mayuscula_a_Minuscula.cpp", "type": "file", "path": "FP_sesion04/I_Mayuscula_a_Minuscula.cpp" },
-                        { "name": "I_Minuscula_a_Mayuscula.cpp", "type": "file", "path": "FP_sesion04/I_Minuscula_a_Mayuscula.cpp" },
-                        { "name": "I_Valida_12horas.cpp", "type": "file", "path": "FP_sesion04/I_Valida_12horas.cpp" },
-                        { "name": "I_Valida_24horas.cpp", "type": "file", "path": "FP_sesion04/I_Valida_24horas.cpp" }
-                    ]
-                },
-                {
-                    "name": "Práctica 5",
-                    "type": "folder",
-                    "children": [
-                        { "name": "II_Binario_Decimal_4bits_Comp.cpp", "type": "file", "path": "FP_sesion05/II_Binario_Decimal_4bits_Comp.cpp" },
-                        { "name": "II_CifradoRotacion.cpp", "type": "file", "path": "FP_sesion05/II_CifradoRotacion.cpp" },
-                        { "name": "II_Consulta_Multa.cpp", "type": "file", "path": "FP_sesion05/II_Consulta_Multa.cpp" },
-                        { "name": "II_Subida_SalarioPrecario_enum.cpp", "type": "file", "path": "FP_sesion05/II_Subida_SalarioPrecario_enum.cpp" },
-                        { "name": "II_TarifaAerea_Km_Descuentos.cpp", "type": "file", "path": "FP_sesion05/II_TarifaAerea_Km_Descuentos.cpp" },
-                        { "name": "II_Valida_12horas_Comp.cpp", "type": "file", "path": "FP_sesion05/II_Valida_12horas_Comp.cpp" },
-                        { "name": "II_Valida_24horas_Comp.cpp", "type": "file", "path": "FP_sesion05/II_Valida_24horas_Comp.cpp" }
-                    ]
-                },
-                { "name": "README.md", "type": "file", "path": "README.md" },
-                { "name": "index.html", "type": "file", "path": "index.html" }
-            ]
-        };
-
         const fileListContainer = document.getElementById('file-list');
         const themeToggle = document.getElementById('theme-toggle');
+
+        // --- ⬇️ NUEVA LÓGICA PARA OBTENER ARCHIVOS DE GITHUB ⬇️ ---
+
+        const GITHUB_USER = 'mario25-mc';
+        const GITHUB_REPO = 'FP_Practicas';
+        
+        // Muestra un mensaje de carga inicial.
+        function showStatusMessage(message, showSpinner = false) {
+            let spinnerIcon = showSpinner ? `<i class="fas fa-spinner spinner"></i>` : '';
+            fileListContainer.innerHTML = `<div class="status-message">${spinnerIcon}${message}</div>`;
+        }
+
+        // Función principal para obtener y construir el árbol de archivos.
+        async function fetchRepoTree() {
+            showStatusMessage('Cargando archivos...', true);
+            try {
+                // La API de Git Tree nos da todos los archivos de forma recursiva en una sola llamada.
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/git/trees/main?recursive=1`);
+                if (!response.ok) {
+                    throw new Error(`Error de red: ${response.statusText}`);
+                }
+                const data = await response.json();
+                
+                // Construye la estructura de árbol a partir de la lista plana de archivos.
+                const fileTree = buildTree(data.tree);
+
+                // Limpia el contenedor y renderiza el árbol.
+                fileListContainer.innerHTML = '';
+                const treeView = createTreeView(fileTree);
+                fileListContainer.appendChild(treeView);
+            } catch (error) {
+                console.error("Error al obtener los datos del repositorio:", error);
+                showStatusMessage('No se pudieron cargar los archivos. Inténtalo de nuevo más tarde.');
+            }
+        }
+
+        // Convierte la lista de archivos de la API en una estructura de carpetas anidadas.
+        function buildTree(files) {
+            const root = { name: GITHUB_REPO, type: 'folder', children: [] };
+            const nodeMap = { '': root };
+
+            for (const file of files) {
+                const parts = file.path.split('/');
+                let currentLevel = root.children;
+                let pathSoFar = '';
+
+                for (let i = 0; i < parts.length; i++) {
+                    const part = parts[i];
+                    pathSoFar += (pathSoFar ? '/' : '') + part;
+
+                    let node = currentLevel.find(n => n.name === part);
+
+                    if (!node) {
+                        const isLastPart = i === parts.length - 1;
+                        const type = isLastPart && file.type === 'blob' ? 'file' : 'folder';
+                        
+                        node = {
+                            name: part,
+                            type: type,
+                            path: pathSoFar,
+                            // La URL para ver el archivo en GitHub.
+                            url: `https://github.com/${GITHUB_USER}/${GITHUB_REPO}/blob/main/${pathSoFar}`,
+                            children: type === 'folder' ? [] : undefined
+                        };
+                        currentLevel.push(node);
+                    }
+                    if (node.type === 'folder') {
+                        currentLevel = node.children;
+                    }
+                }
+            }
+            return root;
+        }
+
+        // --- ⬆️ FIN DE LA NUEVA LÓGICA ⬆️ ---
+
 
         function getFileIcon(fileName) {
             if (fileName.endsWith('.cpp')) return 'fa-brands fa-cuttlefish';
@@ -373,12 +417,19 @@
                 return ul;
             }
 
-            node.children.forEach((child, index) => {
+            // Ordena para que las carpetas aparezcan antes que los archivos.
+            const sortedChildren = [...node.children].sort((a, b) => {
+                if (a.type === b.type) return a.name.localeCompare(b.name);
+                return a.type === 'folder' ? -1 : 1;
+            });
+
+            sortedChildren.forEach((child, index) => {
                 const li = document.createElement('li');
-                li.style.animationDelay = `${index * 40}ms`;
+                li.classList.add('animated');
+                li.style.animationDelay = `${index * 30}ms`;
 
                 if (child.type === 'folder') {
-                    li.className = 'folder';
+                    li.className += ' folder';
                     const span = document.createElement('span');
                     span.innerHTML = `<i class="fa-solid fa-chevron-right folder-toggle-icon"></i><i class="fa-solid fa-folder"></i> ${child.name}`;
                     li.appendChild(span);
@@ -392,9 +443,9 @@
                     });
 
                 } else {
-                    li.className = 'file';
+                    li.className += ' file';
                     const a = document.createElement('a');
-                    a.href = child.path;
+                    a.href = child.url;
                     a.target = '_blank';
                     a.innerHTML = `<i class="${getFileIcon(child.name)}"></i> ${child.name}`;
                     li.appendChild(a);
@@ -405,6 +456,7 @@
             return ul;
         }
 
+        // --- Lógica para el Modo Oscuro (sin cambios) ---
         function applyTheme(theme) {
             if (theme === 'dark') {
                 document.body.classList.add('dark-mode');
@@ -426,8 +478,8 @@
             applyTheme(newTheme);
         });
 
-        const treeView = createTreeView(fileStructure);
-        fileListContainer.appendChild(treeView);
+        // Inicia la carga de archivos del repositorio.
+        fetchRepoTree();
     });
     </script>
 </body>
