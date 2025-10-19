@@ -29,7 +29,7 @@ int main() {
     string secuencia_original;
     do {
         cout << "Introduzca una secuencia de caracteres que termine con *: ";
-        cin >> secuencia_original;
+        getline(cin , secuencia_original);
 
         //Si no termina en '*' se pide otra secuencia
         if (secuencia_original.at(secuencia_original.length() - 1) != '*') {
@@ -43,13 +43,19 @@ int main() {
     char char_actual;
     int contador_char;  //Contador de caracteres iguales
 
-    contador_char = 1;
-    for (int i = 0;
-        i < secuencia_original.length() - 1 && secuencia_original.at(i) != '*';
-        i++) {  //Continuar hasta que se llegue al '*'
+    string secuencia_limpia = "";   //Se eliminan los espacios
+    for (int i = 0; secuencia_original.at(i) != '*'; i++) {
+        if (secuencia_original.at(i) != ' ') {
+            secuencia_limpia += secuencia_original.at(i);
+        }
+    }
+    secuencia_limpia += "*";
 
-        char_actual = secuencia_original.at(i);
-        char_siguiente = secuencia_original.at(i + 1);
+    contador_char = 1;
+    for (int i = 0; secuencia_limpia.at(i) != '*'; i++) {  
+        //Continuar hasta que se llegue al '*'
+        char_actual = secuencia_limpia.at(i);
+        char_siguiente = secuencia_limpia.at(i + 1);
 
         if (char_actual == char_siguiente) {
             //Si los char son iguales aumentar el contador

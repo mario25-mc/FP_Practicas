@@ -88,14 +88,16 @@ int main() {
 
         // Proceso de validación
         bool es_correcta = true;
-        string motivo_error;
+        bool digitos_ok = true;
+        string motivo_error = "";
 
-        // 1. Comprobar longitud
+        // Comprobar longitud
         if (hora_procesar.length() != 5) {
             es_correcta = false;
-            motivo_error = "Longitud incorrecta. Formato: HH:MM (5 chars).";
+            motivo_error+= "\t- Longitud incorrecta. Formato: HH:MM (5 chars)."
+                           "\n";
         } else {
-            // 2. Comprobar formato carácter a carácter
+            // Comprobar formato carácter a carácter
             for (int i = 0; i < 5 && es_correcta; i++) {
                 char char_actual = hora_procesar.at(i);
 
@@ -103,19 +105,22 @@ int main() {
                 if (i != 2) {
                     if (!isdigit(char_actual)) {
                         es_correcta = false;
-                        motivo_error="Formato invalido. H/M deben ser digitos.";
+                        digitos_ok = false;
+                        motivo_error += "\t- Formato invalido. H/M deben ser "
+                                        "digitos.\n";
                     }
                 } else {    // Comprueba la posición del separador 
                     if (char_actual != ':') {
                         es_correcta = false;
-                        motivo_error = "Separador incorrecto. Debe ser ':'.";
+                        motivo_error += "\t- Separador incorrecto. Debe ser "
+                                        "':'.\n";
                     }
                 }
             }
         }
 
-        // 3. Si el formato es correcto, comprobar los rangos numéricos
-        if (es_correcta) {
+        // Si los digitos estan en su posición, comprobar los rangos numéricos
+        if (digitos_ok) {
             // Extraer horas y minutos como cadenas
             string horas_str = hora_procesar.substr(0, 2);
             string minutos_str = hora_procesar.substr(3, 2);
@@ -127,10 +132,11 @@ int main() {
             // Validar rango
             if (horas < 0 || horas > 23) {
                 es_correcta = false;
-                motivo_error = "Rango de hora invalido. Debe ser 00-23.";
-            } else if (minutos < 0 || minutos > 59) {
+                motivo_error += "\t- Rango de hora invalido. Debe ser 00-23.\n";
+            } if (minutos < 0 || minutos > 59) {
                 es_correcta = false;
-                motivo_error = "Rango de minutos invalido. Debe ser 00-59.";
+                motivo_error += "\t- Rango de minutos invalido. Debe ser 00-59."
+                                "\n";
             }
         }
         
@@ -146,8 +152,8 @@ int main() {
                 cout << "'" << hora_procesar << "' -> HORA CORRECTA." << endl;
                 correctas++;
             } else {
-                cout << "'" << hora_procesar << "' -> HORA INCORRECTA. Motivo: " 
-                    << motivo_error << endl;
+                cout << "'" << hora_procesar << "' -> HORA INCORRECTA." << endl 
+                            << "Motivos: "<< endl << motivo_error;
                 incorrectas++;
             }
         }

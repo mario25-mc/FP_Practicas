@@ -43,7 +43,7 @@ int main (){
         do{
            
             es_int = true;
-            cout << "Introduzca la base (numero natural): ";
+            cout << "Introduzca la base (FIN para salir): ";
             cin >> base_str;
 
             if (base_str != "FIN") {   

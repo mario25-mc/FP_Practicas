@@ -42,7 +42,7 @@ int main (){
 
         do{
             es_int = true;
-            cout << "Introduzca la base (numero natural): ";
+            cout << "Introduzca la base (0 para salir): ";
             cin >> base_str;
             
             // Comprobar si es un numero natural
