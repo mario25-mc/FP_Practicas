@@ -66,7 +66,9 @@ int main() {
         
             if(char_actual == '.'){
                 numero_pts++;
-                if(numero_pts > 1) media_ok = false; //Solo un punto
+                if(numero_pts > 1) {
+                    media_ok = false; //Solo un punto
+                }
             }
             else if(char_actual == '-' && i != 0){ 
                 media_ok = false; //Signo '-' al inicio
@@ -95,7 +97,9 @@ int main() {
         
             if(char_actual == '.'){
                 numero_pts++;
-                if(numero_pts > 1) desviacion_ok = false; //Solo un punto
+                if(numero_pts > 1) {
+                    desviacion_ok = false;  //Solo un punto
+                } 
             }
             else if(char_actual == '-' && i != 0){ 
                 desviacion_ok = false; //Signo '-' al inicio
@@ -104,16 +108,18 @@ int main() {
                 desviacion_ok = false; //Tiene que ser un digito
             }
         }
-        desviacion = stod(desviacion_str);  //Pasar a valor numerico
-        if(desviacion < 0) {
-            desviacion_ok = false;  //Tiene que ser positiva
-        }
-        if(!desviacion_ok){
-            cout << "Error: La desviacion debe ser un numero positivo" << endl;
-            cout << endl;
+        if (desviacion_ok) {
+            desviacion = stod(desviacion_str);  //Pasar a valor numerico
+            if(desviacion < 0) {
+                desviacion_ok = false;  //Tiene que ser positiva
+            }
+            if(!desviacion_ok){
+                cout << "Error: La desviacion debe ser un numero positivo" 
+                     << endl;
+                cout << endl;
+            }
         }
     } while(!desviacion_ok);
-    
 
     //x_final
     bool x_final_ok;
@@ -128,7 +134,9 @@ int main() {
         
             if(char_actual == '.'){
                 numero_pts++;
-                if(numero_pts > 1) x_final_ok = false; //Solo un punto
+                if(numero_pts > 1) {
+                    x_final_ok = false; //Solo un punto
+                }
             }
             else if(char_actual == '-' && i != 0){ 
                 x_final_ok = false; //Signo '-' al inicio
