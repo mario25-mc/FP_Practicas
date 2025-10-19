@@ -94,8 +94,9 @@ int main() {
         // Comprobar longitud
         if (hora_procesar.length() != 5) {
             es_correcta = false;
-            motivo_error+= "\t- Longitud incorrecta. Formato: HH:MM (5 chars)."
-                           "\n";
+            digitos_ok = false;
+            motivo_error += "\t- Longitud incorrecta. Formato: HH:MM (5 chars)."
+                            "\n";
         } else {
             // Comprobar formato carácter a carácter
             for (int i = 0; i < 5 && es_correcta; i++) {
