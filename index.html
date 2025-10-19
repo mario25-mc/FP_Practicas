@@ -539,8 +539,8 @@
                 if (child.type === 'folder') {
                     li.classList.add('folder');
                     
-                    // Abrir las subcarpetas si están filtradas por una búsqueda
-                    if (child.isFilteredMatch) {
+                    // Abrir la carpeta raíz por defecto, y las subcarpetas si están filtradas
+                    if (node.isRoot || child.isFilteredMatch) {
                         li.classList.add('open');
                     }
 
