@@ -7,10 +7,9 @@
 /*
     Generador de la Secuencia de Collatz.
 
-    Este programa calcula y muestra la secuencia de Collatz (también conocida
-    como conjetura 3n+1) para un número natural introducido por el usuario.
-    La secuencia se genera aplicando repetidamente las siguientes reglas
-    hasta que el número resultante es 1:
+    Este programa calcula y muestra la secuencia de Collatz para un número 
+    natural introducido por el usuario. La secuencia se genera aplicando
+    las siguientes reglas hasta que el número resultante es 1:
     - Si el número es par, se divide por 2.
     - Si el número es impar, se multiplica por 3 y se le suma 1.
 

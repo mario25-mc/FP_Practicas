@@ -45,6 +45,7 @@ int main() {
     const string ESPECIALES = "@-*!";
     const int MINIMO = 65;  //Valor Ascii de 'A'
     const int MAXIMO = 90;  //Valor Ascii de 'Z'
+    const int LONGITUD_MIN = 12; //Longitud minima contraseña
 
     //Variables
     string contrasenia;
@@ -59,7 +60,7 @@ int main() {
         //Comprobación de la contraseña
         contrasenia_ok = true;
         error = "";  //Eliminar errores de la anterior contraseña
-        if (contrasenia.length() < 12) {
+        if (contrasenia.length() < LONGITUD_MIN) {
             //Comprobar longitud de la contraseña
             contrasenia_ok = false;
             error += "ERROR: Debe tener al menos 12 caracteres\n";
@@ -89,7 +90,7 @@ int main() {
         //Mostrar errores
         if (num_mayusculas < 2) {
             contrasenia_ok = false; 
-            error += "ERROR: Debe tener al menos 2 letras mayusculas.\n";
+            error += "ERROR: Debe tener al menos 2 letras mayusculas\n";
         }
         if (num_especiales == 0) {
             contrasenia_ok = false;
@@ -97,14 +98,17 @@ int main() {
                         "caracteres: @ - * !\n";
         }
         
+        bool char_iguales = false;  //Para no imprimir el error varias veces
         char c_siguiente; //Variable para almacenar el char siguiente a c_actual
-        for (int i = 0; i < contrasenia.length() - 1; i++) {  
+
+        for (int i = 0; i < contrasenia.length() - 1 && !char_iguales; i++) {  
             c_actual = contrasenia.at(i);
             c_siguiente = contrasenia.at(i + 1);
-
+            
             if (c_actual == c_siguiente) {
                 //Si los char son iguales invalidar contraseña
                 contrasenia_ok = false;
+                char_iguales = true;
                 error += "ERROR: No puede haber mas de dos caracteres iguales "
                          "consecutivos\n";
             }

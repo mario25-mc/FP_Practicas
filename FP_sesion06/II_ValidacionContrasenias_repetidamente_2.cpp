@@ -103,20 +103,22 @@ int main() {
                      "caracteres: @ - * !\n";
         }
 
+        bool char_iguales = false;  //Para no imprimir el error varias veces
         char c_siguiente; //Variable para almacenar el char siguiente a c_actual
-        for (int i = 0; i < contrasenia.length() - 1; i++) {
+
+        for (int i = 0; i < contrasenia.length() - 1 && !char_iguales; i++) {  
             c_actual = contrasenia.at(i);
             c_siguiente = contrasenia.at(i + 1);
-
+            
             if (c_actual == c_siguiente) {
                 //Si los char son iguales invalidar contraseña
                 contrasenia_ok = false;
-                error += "ERROR: No puede haber dos caracteres iguales "
+                char_iguales = true;
+                error += "ERROR: No puede haber mas de dos caracteres iguales "
                          "consecutivos\n";
-                break; // Salimos del bucle para no repetir el mismo error
             }
-
         }
+        
         //Mostrar error si la contraseña no es válida
         if (!contrasenia_ok) {
             cout << error;
