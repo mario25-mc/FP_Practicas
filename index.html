@@ -7,7 +7,6 @@
     <meta name="description" content="Navega por los archivos y carpetas del repositorio FP_Practicas en tiempo real.">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6.1.1 (con nuevos íconos de marcas y archivos) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
     <style>
@@ -70,6 +69,12 @@
             color: var(--text-primary);
             margin: 0;
             transition: background-color var(--transition-speed), color var(--transition-speed);
+            
+            /* --- CAMBIO DE LOOK --- */
+            /* Añade un gradiente sutil al fondo para más profundidad */
+            background-image: radial-gradient(circle, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            background-attachment: fixed;
+            background-size: cover;
         }
 
         .container {
@@ -78,8 +83,12 @@
             padding: 2.5rem;
             background-color: var(--bg-secondary);
             border-radius: var(--radius);
-            box-shadow: 0 10px 30px var(--shadow-color);
-            border: 1px solid var(--border-color);
+            
+            /* --- CAMBIO DE LOOK --- */
+            /* Sombra más suave y moderna, sin borde */
+            box-shadow: 0 8px 32px var(--shadow-color);
+            /* border: 1px solid var(--border-color); */ /* Eliminado */
+            
             transition: all var(--transition-speed);
             animation: fadeInSlideUp 0.6s ease-out forwards;
         }
@@ -127,7 +136,11 @@
             padding: 10px 15px;
             border: 1px solid var(--input-border);
             border-radius: 8px;
-            background-color: var(--input-bg);
+            
+            /* --- CAMBIO DE LOOK --- */
+            /* Fondo integrado con el contenedor */
+            background-color: var(--bg-secondary);
+            
             color: var(--text-primary);
             font-size: 1rem;
             transition: border-color 0.2s, box-shadow 0.2s, background-color var(--transition-speed);
@@ -139,21 +152,24 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
 
+        /* --- CAMBIO DE LOOK: Botón "Fantasma" --- */
         #toggle-all-btn {
             padding: 10px 15px;
-            background-color: var(--btn-bg);
-            color: var(--text-primary);
-            border: 1px solid var(--input-border);
+            background-color: transparent; /* Fondo transparente */
+            color: var(--accent-color); /* Texto en color acento */
+            border: 1px solid var(--accent-color); /* Borde en color acento */
             border-radius: 8px;
             cursor: pointer;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: background-color 0.2s, color 0.2s, transform 0.1s;
+            transition: background-color 0.2s, color 0.2s, transform 0.1s, border-color 0.2s;
         }
         #toggle-all-btn:hover {
-            background-color: var(--border-color);
+            background-color: var(--accent-hover); /* Se rellena al pasar el ratón */
+            border-color: var(--accent-hover);
+            color: var(--bg-secondary); /* Texto en color de fondo para contraste */
         }
         #toggle-all-btn:active {
             transform: scale(0.98);
@@ -226,9 +242,13 @@
         }
         ul.file-tree ul {
             list-style: none;
-            padding-left: 22px;
-            margin-left: 18px;
-            border-left: 2px solid var(--border-color);
+            
+            /* --- CAMBIO DE LOOK --- */
+            /* Línea guía más sutil y espaciado ajustado */
+            padding-left: 20px;
+            margin-left: 20px;
+            border-left: 1px dotted var(--border-color);
+            
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s ease-in-out, margin-top 0.4s ease-in-out;
@@ -252,7 +272,9 @@
         }
         .file-tree li:hover {
             background-color: var(--bg-primary);
-            transform: translateX(5px);
+            /* --- CAMBIO DE LOOK --- */
+            /* Transformación más sutil */
+            transform: translateX(3px);
         }
         .file-tree .folder > span {
             font-weight: 500;
@@ -262,7 +284,9 @@
         }
 
         .folder-toggle-icon {
-            transition: transform 0.3s ease;
+            /* --- CAMBIO DE LOOK --- */
+            /* Transición de color añadida y rotación movida */
+            transition: transform 0.3s ease, color 0.3s ease;
             color: var(--text-secondary);
             width: 20px;
             text-align: center;
@@ -270,14 +294,24 @@
         }
         .file-tree .folder.open > span .folder-toggle-icon {
             transform: rotate(90deg);
+            color: var(--accent-color); /* Color de acento al abrir */
         }
 
         .file-tree i {
             margin-right: 12px;
-            color: var(--accent-color);
+            /* --- CAMBIO DE LOOK --- */
+            /* Color de icono por defecto más sutil */
+            color: var(--text-secondary);
             width: 20px;
             text-align: center;
         }
+        
+        /* --- CAMBIO DE LOOK --- */
+        /* Icono de carpeta siempre en color acento */
+        .file-tree .folder > span .fa-folder {
+            color: var(--accent-color);
+        }
+
         .file-tree .file a {
             text-decoration: none;
             color: var(--text-primary);
@@ -286,6 +320,12 @@
             transition: color 0.2s;
         }
         .file-tree .file a:hover {
+            color: var(--accent-hover);
+        }
+        
+        /* --- CAMBIO DE LOOK --- */
+        /* Icono del archivo cambia de color junto con el texto */
+        .file-tree .file a:hover i {
             color: var(--accent-hover);
         }
         
@@ -374,7 +414,6 @@
 
         </div>
 
-        <!-- Controles de Búsqueda y Toggle (NUEVOS) -->
         <div class="controls-container">
             <input type="text" id="search-input" placeholder="Buscar archivos o carpetas...">
             <button id="toggle-all-btn">
@@ -385,8 +424,7 @@
 
         <main id="file-explorer">
             <div id="file-list">
-                <!-- El contenido se generará dinámicamente aquí -->
-            </div>
+                </div>
         </main>
     </div>
 
@@ -461,6 +499,10 @@
                 // Renderiza el árbol inicial (muestra la raíz abierta por defecto).
                 renderTree(fullFileTree);
 
+                // Inicializa el estado del botón de alternancia para reflejar la raíz expandida.
+                toggleAllBtn.dataset.state = 'expanded';
+                toggleAllBtn.querySelector('i').className = 'fa-solid fa-compress-arrows-alt';
+                toggleAllBtn.querySelector('span').textContent = 'Colapsar Todo';
             } catch (error) {
                 console.error("Error al obtener los datos del repositorio:", error);
                 showStatusMessage('No se pudieron cargar los archivos. Inténtalo de nuevo más tarde.');
@@ -632,9 +674,9 @@
         searchInput.addEventListener('input', () => {
             const searchTerm = searchInput.value.trim();
             if (searchTerm === '') {
-                renderTree(fullFileTree); // Muestra el árbol completo
-                toggleAllBtn.innerHTML = '<i class="fa-solid fa-expand-arrows-alt"></i><span>Expandir Todo</span>';
-                toggleAllBtn.dataset.state = 'collapsed';
+                renderTree(fullFileTree); // Muestra el árbol completo (raíz expandida)
+                toggleAllBtn.innerHTML = '<i class="fa-solid fa-compress-arrows-alt"></i><span>Colapsar Todo</span>';
+                toggleAllBtn.dataset.state = 'expanded';
             } else {
                 // Filtra el árbol completo.
                 const filteredTree = filterTree(fullFileTree, searchTerm);
@@ -646,8 +688,7 @@
         });
 
         // Manejador para expandir/colapsar todo.
-        toggleAllBtn.dataset.state = 'collapsed';
-        toggleAllBtn.addEventListener('click', () => {
+        toggleAllBtn.addEventListener('click', function() {
             const isCollapsed = toggleAllBtn.dataset.state === 'collapsed';
             const folders = fileListContainer.querySelectorAll('.folder');
             const icon = toggleAllBtn.querySelector('i');
@@ -672,8 +713,6 @@
                 text.textContent = 'Expandir Todo';
             }
         });
-
-
         // --- Lógica para el Modo Oscuro (sin cambios) ---
         function applyTheme(theme) {
             if (theme === 'dark') {
