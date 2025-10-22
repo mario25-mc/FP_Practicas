@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="no-js">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
     <style>
+        /* --- Reset Básico y Preparación --- */
+        .no-js #file-explorer { display: none; }
+        .js #file-explorer { display: block; }
+
         /* --- Definición de variables de color para temas --- */
         :root {
             --font-family: 'Inter', sans-serif;
@@ -17,32 +21,30 @@
             --transition-speed: 0.3s;
 
             /* Tema Claro (por defecto) */
-            --bg-primary: #f5f7fa;
+            --bg-primary: #f8f9fa;
             --bg-secondary: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
             --border-color: #e2e8f0;
-            --accent-color: #3b82f6;
-            --accent-hover: #2563eb;
-            --shadow-color: rgba(0, 0, 0, 0.05);
-            --input-bg: #f5f7fa;
+            --accent-color: #007bff;
+            --accent-hover: #0056b3;
+            --shadow-color: rgba(0, 0, 0, 0.04);
+            --highlight-bg: rgba(0, 123, 255, 0.15);
             --input-border: #cbd5e1;
-            --btn-bg: #f0f4f8;
         }
 
         /* Tema Oscuro */
         body.dark-mode {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
             --text-primary: #e2e8f0;
             --text-secondary: #94a3b8;
             --border-color: #334155;
-            --accent-color: #60a5fa;
-            --accent-hover: #3b82f6;
-            --shadow-color: rgba(0, 0, 0, 0.15);
-            --input-bg: #334155;
+            --accent-color: #4dabf7;
+            --accent-hover: #1c7ed6;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --highlight-bg: rgba(77, 171, 247, 0.15);
             --input-border: #475569;
-            --btn-bg: #334155;
         }
 
         /* --- Animaciones --- */
@@ -69,10 +71,9 @@
             color: var(--text-primary);
             margin: 0;
             transition: background-color var(--transition-speed), color var(--transition-speed);
-            
-            /* --- CAMBIO DE LOOK --- */
-            /* Añade un gradiente sutil al fondo para más profundidad */
-            background-image: radial-gradient(circle, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+
+            /* Fondo con gradiente sutil para más profundidad */
+            background-image: radial-gradient(circle at top, var(--bg-secondary) 0%, var(--bg-primary) 100%);
             background-attachment: fixed;
             background-size: cover;
         }
@@ -82,12 +83,9 @@
             margin: 2rem auto;
             padding: 2.5rem;
             background-color: var(--bg-secondary);
-            border-radius: var(--radius);
-            
-            /* --- CAMBIO DE LOOK --- */
-            /* Sombra más suave y moderna, sin borde */
-            box-shadow: 0 8px 32px var(--shadow-color);
-            /* border: 1px solid var(--border-color); */ /* Eliminado */
+            border-radius: 16px; /* Aumentamos el radio para un look más suave */
+            box-shadow: 0 10px 40px var(--shadow-color);
+            border: 1px solid var(--border-color);
             
             transition: all var(--transition-speed);
             animation: fadeInSlideUp 0.6s ease-out forwards;
@@ -122,7 +120,7 @@
             margin-top: 0.5rem;
             transition: font-size var(--transition-speed);
         }
-
+        
         /* --- Controles de Búsqueda y Filtro (NUEVO) --- */
         .controls-container {
             display: flex;
@@ -135,10 +133,7 @@
             flex-grow: 1;
             padding: 10px 15px;
             border: 1px solid var(--input-border);
-            border-radius: 8px;
-            
-            /* --- CAMBIO DE LOOK --- */
-            /* Fondo integrado con el contenedor */
+            border-radius: 10px;
             background-color: var(--bg-secondary);
             
             color: var(--text-primary);
@@ -149,27 +144,27 @@
         #search-input:focus {
             outline: none;
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 0 3px var(--highlight-bg);
         }
 
-        /* --- CAMBIO DE LOOK: Botón "Fantasma" --- */
+        /* Botón de expandir/colapsar */
         #toggle-all-btn {
             padding: 10px 15px;
-            background-color: transparent; /* Fondo transparente */
-            color: var(--accent-color); /* Texto en color acento */
-            border: 1px solid var(--accent-color); /* Borde en color acento */
-            border-radius: 8px;
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: background-color 0.2s, color 0.2s, transform 0.1s, border-color 0.2s;
+            transition: all 0.2s ease;
         }
         #toggle-all-btn:hover {
-            background-color: var(--accent-hover); /* Se rellena al pasar el ratón */
-            border-color: var(--accent-hover);
-            color: var(--bg-secondary); /* Texto en color de fondo para contraste */
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
         }
         #toggle-all-btn:active {
             transform: scale(0.98);
@@ -181,25 +176,26 @@
 
         .theme-switcher {
             position: relative;
-            width: 60px;
-            height: 32px;
-            background-color: var(--bg-primary);
-            border-radius: 16px;
-            padding: 2px;
+            width: 56px;
+            height: 30px;
+            background-color: var(--border-color);
+            border-radius: 15px;
             cursor: pointer;
-            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
         
         .theme-switcher .slider {
             position: absolute;
             top: 50%;
-            transform: translateY(-50%);
-            left: 2px;
-            width: 28px;
-            height: 28px;
-            background-color: var(--accent-color);
+            left: 3px;
+            transform: translateY(-50%) scale(1);
+            width: 24px;
+            height: 24px;
+            background-color: var(--bg-secondary);
             border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color var(--transition-speed);
             display: flex;
             align-items: center;
@@ -207,16 +203,26 @@
         }
 
         #theme-toggle:checked + .theme-switcher .slider {
-            transform: translateY(-50%) translateX(28px);
+            transform: translateY(-50%) translateX(26px);
+        }
+        .theme-switcher:active .slider {
+            transform: translateY(-50%) scale(0.9); /* Efecto de "presionar" */
+        }
+        #theme-toggle:checked + .theme-switcher:active .slider {
+            transform: translateY(-50%) translateX(26px) scale(0.9);
         }
 
+        #theme-toggle:checked + .theme-switcher { background-color: var(--accent-color); }
+        
+        /* Estilos para los iconos DENTRO del slider */
         .theme-switcher .slider i {
             position: absolute;
             font-size: 16px;
-            color: var(--bg-secondary);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            color: var(--accent-color); /* Color de acento para que contraste con el fondo blanco/oscuro del slider */
+            transition: opacity 0.3s ease, transform 0.3s ease, color var(--transition-speed);
         }
 
+        /* Estado inicial (tema claro) */
         .theme-switcher .slider .fa-sun {
             opacity: 1;
             transform: rotate(0deg);
@@ -226,6 +232,7 @@
             transform: rotate(-90deg);
         }
 
+        /* Estado activado (tema oscuro) */
         #theme-toggle:checked + .theme-switcher .slider .fa-sun {
             opacity: 0;
             transform: rotate(90deg);
@@ -233,6 +240,9 @@
         #theme-toggle:checked + .theme-switcher .slider .fa-moon {
             opacity: 1;
             transform: rotate(0deg);
+        }
+        #theme-toggle:checked + .theme-switcher .slider i {
+            color: var(--accent-color);
         }
 
         /* --- Explorador de Archivos --- */
@@ -242,16 +252,13 @@
         }
         ul.file-tree ul {
             list-style: none;
-            
-            /* --- CAMBIO DE LOOK --- */
-            /* Línea guía más sutil y espaciado ajustado */
-            padding-left: 20px;
-            margin-left: 20px;
-            border-left: 1px dotted var(--border-color);
+            padding-left: 22px;
+            margin-left: 10px;
+            border-left: 1px solid var(--border-color);
             
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease-in-out, margin-top 0.4s ease-in-out;
+            transition: max-height 0.15s ease-in-out, margin-top 0.15s ease-in-out;
             margin-top: 0;
         }
 
@@ -262,54 +269,61 @@
 
         .file-tree li {
             padding: 12px 15px;
-            margin: 4px 0;
-            border-radius: 8px;
+            margin: 2px 0;
+            border-radius: 10px;
             transition: background-color 0.2s, transform 0.2s;
         }
         .file-tree li.animated {
              opacity: 0;
              animation: fadeInSlideUp 0.5s ease-out forwards;
         }
-        .file-tree li:hover {
-            background-color: var(--bg-primary);
-            /* --- CAMBIO DE LOOK --- */
-            /* Transformación más sutil */
-            transform: translateX(3px);
-        }
         .file-tree .folder > span {
             font-weight: 500;
             cursor: pointer;
             display: flex;
             align-items: center;
+            /* Movemos el padding y el radio aquí para que el hover sea preciso */
+            padding: 12px 15px;
+            border-radius: 10px;
+            transition: background-color 0.2s, transform 0.2s;
+            margin: 2px 0; /* Mantenemos el margen vertical */
+        }
+
+        /* Ahora el hover se aplica directamente al span, que ya tiene el tamaño correcto */
+        .file-tree .folder > span:hover {
+            background-color: var(--bg-primary);
+            transform: translateX(4px);
+        }
+
+        /* Quitamos el padding del <li> de la carpeta para evitar duplicarlo */
+        .file-tree li.folder {
+            padding: 0;
         }
 
         .folder-toggle-icon {
-            /* --- CAMBIO DE LOOK --- */
-            /* Transición de color añadida y rotación movida */
             transition: transform 0.3s ease, color 0.3s ease;
             color: var(--text-secondary);
             width: 20px;
             text-align: center;
-            margin-left: -5px;
         }
         .file-tree .folder.open > span .folder-toggle-icon {
             transform: rotate(90deg);
-            color: var(--accent-color); /* Color de acento al abrir */
+            color: var(--accent-color);
         }
 
         .file-tree i {
             margin-right: 12px;
-            /* --- CAMBIO DE LOOK --- */
-            /* Color de icono por defecto más sutil */
             color: var(--text-secondary);
             width: 20px;
             text-align: center;
+            transition: color 0.2s;
         }
         
-        /* --- CAMBIO DE LOOK --- */
-        /* Icono de carpeta siempre en color acento */
         .file-tree .folder > span .fa-folder {
             color: var(--accent-color);
+        }
+        .file-tree .folder.open > span .fa-folder {
+            color: var(--accent-hover);
         }
 
         .file-tree .file a {
@@ -317,16 +331,23 @@
             color: var(--text-primary);
             display: flex;
             align-items: center;
-            transition: color 0.2s;
+            /* Hacemos que el enlace ocupe todo el espacio y tenga el padding */
+            padding: 12px 15px;
+            margin: -12px -15px; /* Compensamos el padding del <li> padre */
         }
-        .file-tree .file a:hover {
+
+        /* El hover se aplica ahora al <li> para que el fondo y el enlace coincidan */
+        .file-tree li.file:hover {
+            background-color: var(--bg-primary);
+            transform: translateX(4px);
+        }
+
+        .file-tree li.file:hover a {
             color: var(--accent-hover);
         }
         
-        /* --- CAMBIO DE LOOK --- */
-        /* Icono del archivo cambia de color junto con el texto */
-        .file-tree .file a:hover i {
-            color: var(--accent-hover);
+        .file-tree li.file:hover a i {
+            color: inherit; /* Hereda el color del enlace (<a>) */
         }
         
         /* Estilos para el estado de carga y error */
@@ -348,6 +369,12 @@
             color: var(--text-secondary);
             font-style: italic;
         }
+        
+        /* Resaltado de búsqueda */
+        .highlight {
+            background-color: var(--highlight-bg);
+            border-radius: 3px;
+        }
 
         /* --- Pie de Página --- */
         footer {
@@ -367,7 +394,7 @@
         }
 
         /* --- Diseño Responsivo --- */
-        @media (max-width: 700px) {
+        @media (max-width: 768px) {
             .container {
                 margin: 1rem;
                 padding: 1.5rem;
@@ -389,7 +416,7 @@
 
             .controls-container {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: 1rem;
             }
         }
 
@@ -397,6 +424,7 @@
 </head>
 <body>
 
+    <noscript>Esta página requiere JavaScript para funcionar correctamente.</noscript>
     <div class="container">
         <div class="header-container">
             <header>
@@ -424,7 +452,7 @@
 
         <main id="file-explorer">
             <div id="file-list">
-                </div>
+            </div>
         </main>
     </div>
 
@@ -433,6 +461,9 @@
     </footer>
 
     <script>
+    // Añade la clase 'js' si JavaScript está habilitado, para ocultar el contenido si no lo está.
+    document.documentElement.classList.remove('no-js');
+    document.documentElement.classList.add('js');
     document.addEventListener('DOMContentLoaded', function() {
         const fileListContainer = document.getElementById('file-list');
         const themeToggle = document.getElementById('theme-toggle');
@@ -441,7 +472,7 @@
 
         const GITHUB_USER = 'mario25-mc';
         const GITHUB_REPO = 'FP_Practicas';
-        let fullFileTree = null; // Almacena el árbol completo para permitir el filtrado.
+        let fullFileTree = null; // Almacena el árbol completo para permitir el filtrado sin volver a llamar a la API.
 
         // --- FUNCIONES DE UTILIDAD ---
 
@@ -479,6 +510,12 @@
                 default: return 'fa-solid fa-file';
             }
         }
+
+        // Escapa caracteres especiales de una cadena para usarla en una expresión regular.
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
         
         // --- LÓGICA DE GITHUB API Y ESTRUCTURA DE DATOS ---
 
@@ -494,13 +531,13 @@
                 const data = await response.json();
                 
                 // Construye la estructura de árbol.
-                fullFileTree = buildTree(data.tree);
+                fullFileTree = buildTree(data.tree, GITHUB_REPO);
 
                 // Renderiza el árbol inicial (muestra la raíz abierta por defecto).
                 renderTree(fullFileTree);
 
                 // Inicializa el estado del botón de alternancia para reflejar la raíz expandida.
-                toggleAllBtn.dataset.state = 'expanded';
+                toggleAllBtn.dataset.state = 'collapsed'; // Se muestra expandido, así que el próximo click colapsa
                 toggleAllBtn.querySelector('i').className = 'fa-solid fa-compress-arrows-alt';
                 toggleAllBtn.querySelector('span').textContent = 'Colapsar Todo';
             } catch (error) {
@@ -510,12 +547,12 @@
         }
 
         // Convierte la lista plana de archivos en una estructura de carpetas anidadas.
-        function buildTree(files) {
+        function buildTree(files, repoName) {
             // El nodo raíz representa la carpeta del repositorio
-            const root = { name: GITHUB_REPO, type: 'folder', children: [], isRoot: true }; 
+            const root = { name: repoName, type: 'folder', children: [], isRoot: true, path: '' }; 
             
             // Filtra entradas de árbol que no son blobs (archivos) o trees (carpetas).
-            const filteredFiles = files.filter(file => file.type === 'blob' || file.type === 'tree');
+            const filteredFiles = files.filter(file => file.path && (file.type === 'blob' || file.type === 'tree'));
             
             for (const file of filteredFiles) {
                 const parts = file.path.split('/');
@@ -554,7 +591,7 @@
         // --- LÓGICA DE RENDERIZADO Y BÚSQUEDA ---
 
         // Función recursiva para crear el HTML del árbol de archivos.
-        function createTreeView(node, delayOffset = 0) {
+        function createTreeView(node, searchTerm = '', delayOffset = 0) {
             const ul = document.createElement('ul');
             ul.className = 'file-tree';
             let animationCounter = delayOffset;
@@ -574,7 +611,7 @@
                 li.classList.add('animated');
                 li.style.animationDelay = `${animationCounter * 30}ms`;
                 animationCounter++; // Incrementa el contador para el siguiente hijo
-                
+
                 // Asigna una clase para poder buscar y manipular todos los elementos
                 li.setAttribute('data-path', child.path);
 
@@ -582,31 +619,39 @@
                     li.classList.add('folder');
                     
                     // Abrir la carpeta raíz por defecto, y las subcarpetas si están filtradas
-                    if (node.isRoot || child.isFilteredMatch) {
+                    if (node.isRoot || searchTerm) {
                         li.classList.add('open');
                     }
 
                     const span = document.createElement('span');
-                    span.innerHTML = `<i class="fa-solid fa-chevron-right folder-toggle-icon"></i><i class="fa-solid fa-folder"></i> ${child.name}`;
+                    let folderNameHTML = child.name;
+                    if (searchTerm && child.isFilteredMatch) {
+                        const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+                        folderNameHTML = child.name.replace(regex, `<span class="highlight">$1</span>`);
+                    }
+                    span.innerHTML = `<i class="fa-solid fa-chevron-right folder-toggle-icon"></i><i class="fa-solid fa-folder"></i> ${folderNameHTML}`;
+                    
+                    // Añadimos el evento de click al span para alternar la carpeta
+                    span.addEventListener('click', (e) => { e.stopPropagation(); li.classList.toggle('open'); });
+
                     li.appendChild(span);
                     
-                    const childUl = createTreeView(child, animationCounter);
+                    const childUl = createTreeView(child, searchTerm, animationCounter);
                     li.appendChild(childUl);
                     animationCounter = childUl.animationCounter || animationCounter;
-
-                    span.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        li.classList.toggle('open');
-                    });
 
                 } else {
                     li.classList.add('file');
                     const a = document.createElement('a');
                     a.href = child.url;
                     a.target = '_blank';
-                    // El resaltado solo se aplica si está filtrado
-                    const nameDisplay = child.isFilteredMatch ? `<strong>${child.name}</strong>` : child.name;
-                    a.innerHTML = `<i class="${getFileIcon(child.name)}"></i> ${nameDisplay}`;
+                    
+                    let fileNameHTML = child.name;
+                    if (searchTerm) {
+                        const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+                        fileNameHTML = child.name.replace(regex, `<span class="highlight">$1</span>`);
+                    }
+                    a.innerHTML = `<i class="${getFileIcon(child.name)}"></i> ${fileNameHTML}`;
                     li.appendChild(a);
                 }
                 ul.appendChild(li);
@@ -617,54 +662,52 @@
 
         // Función recursiva para filtrar el árbol de archivos.
         function filterTree(node, searchTerm) {
-            const normalizedSearch = searchTerm.toLowerCase();
-            const filteredChildren = [];
-            let isNodeMatch = false;
-
-            if (node.name.toLowerCase().includes(normalizedSearch)) {
-                isNodeMatch = true;
-            }
+            if (!searchTerm) return node; // Si no hay búsqueda, devuelve el nodo original.
+            const normalizedSearch = searchTerm.toLowerCase().trim();
 
             if (node.children) {
-                for (const child of node.children) {
-                    // Recursivamente filtra a los hijos
-                    const result = filterTree(child, searchTerm);
-                    
-                    // Si el hijo es un match (o contiene un match), lo incluimos
-                    if (result) {
-                        filteredChildren.push(result);
-                        // Si un hijo coincide, el padre (nodo actual) también debe considerarse un match
-                        isNodeMatch = true;
-                    }
+                const filteredChildren = node.children
+                    .map(child => filterTree(child, searchTerm))
+                    .filter(child => child !== null); // Elimina los hijos que no coinciden
+
+                // Un nodo padre coincide si su propio nombre coincide O si tiene hijos que coinciden.
+                const isNodeMatch = node.name.toLowerCase().includes(normalizedSearch);
+                if (filteredChildren.length > 0 || isNodeMatch) {
+                    // Clonamos el nodo para no modificar el árbol original.
+                    return {
+                        ...node,
+                        children: filteredChildren,
+                        isFilteredMatch: isNodeMatch // Marca si este nodo específico coincidió.
+                    };
+                }
+            } else { // Es un archivo (nodo hoja)
+                if (node.name.toLowerCase().includes(normalizedSearch)) {
+                    return { ...node, isFilteredMatch: true };
                 }
             }
 
-            if (isNodeMatch) {
-                // Clonamos el nodo para no modificar el árbol original
-                const clonedNode = { ...node, children: filteredChildren };
-                
-                // Marcamos si este nodo en sí fue el que coincidió con el término de búsqueda
-                clonedNode.isFilteredMatch = node.name.toLowerCase().includes(normalizedSearch); 
-                
-                return clonedNode;
-            }
-
-            return null; // No hay coincidencia ni descendientes coincidentes
+            return null; // No hay coincidencia en este nodo ni en sus descendientes.
         }
 
         // Renderiza el árbol (completo o filtrado).
-        function renderTree(tree) {
+        function renderTree(tree, searchTerm = '') {
             fileListContainer.innerHTML = '';
 
-            // Si el árbol filtrado no tiene hijos, significa que no hubo resultados (excepto la raíz vacía)
-            if (!tree || !tree.children || tree.children.length === 0) {
+            // Si el árbol es nulo o (si no es la raíz y no tiene hijos), no hay nada que mostrar.
+            if (!tree) {
                 fileListContainer.innerHTML = `<div class="no-results">
-                    <i class="fa-solid fa-search-minus"></i> No se encontraron archivos o carpetas que coincidan con la búsqueda.
+                    <i class="fa-solid fa-magnifying-glass"></i> No se encontraron coincidencias.
                 </div>`;
                 return;
             }
 
-            const treeView = createTreeView(tree);
+            // Caso especial: la búsqueda no devuelve nada.
+            if (searchTerm && (!tree.children || tree.children.length === 0) && !tree.isFilteredMatch) {
+                 fileListContainer.innerHTML = `<div class="no-results"><i class="fa-solid fa-magnifying-glass"></i> No se encontraron coincidencias.</div>`;
+                 return;
+            }
+
+            const treeView = createTreeView(tree, searchTerm);
             fileListContainer.appendChild(treeView);
         }
 
@@ -674,28 +717,27 @@
         searchInput.addEventListener('input', () => {
             const searchTerm = searchInput.value.trim();
             if (searchTerm === '') {
-                renderTree(fullFileTree); // Muestra el árbol completo (raíz expandida)
-                toggleAllBtn.innerHTML = '<i class="fa-solid fa-compress-arrows-alt"></i><span>Colapsar Todo</span>';
-                toggleAllBtn.dataset.state = 'expanded';
+                renderTree(fullFileTree); // Muestra el árbol completo
             } else {
                 // Filtra el árbol completo.
                 const filteredTree = filterTree(fullFileTree, searchTerm);
-                renderTree(filteredTree); 
-                // Al filtrar, forzamos el estado a 'expanded' (todos los resultados relevantes deben estar visibles)
-                toggleAllBtn.innerHTML = '<i class="fa-solid fa-compress-arrows-alt"></i><span>Colapsar Todo</span>';
-                toggleAllBtn.dataset.state = 'expanded';
+                renderTree(filteredTree, searchTerm); 
             }
+            // Al buscar, siempre queremos que el botón muestre "Colapsar" porque los resultados se muestran expandidos.
+            toggleAllBtn.dataset.state = 'collapsed';
+            toggleAllBtn.querySelector('i').className = 'fa-solid fa-compress-arrows-alt';
+            toggleAllBtn.querySelector('span').textContent = 'Colapsar Todo';
         });
 
         // Manejador para expandir/colapsar todo.
         toggleAllBtn.addEventListener('click', function() {
-            const isCollapsed = toggleAllBtn.dataset.state === 'collapsed';
+            const shouldExpand = toggleAllBtn.dataset.state === 'expanded';
             const folders = fileListContainer.querySelectorAll('.folder');
             const icon = toggleAllBtn.querySelector('i');
             const text = toggleAllBtn.querySelector('span');
             
             folders.forEach(folder => {
-                if (isCollapsed) {
+                if (shouldExpand) {
                     folder.classList.add('open');
                 } else {
                     folder.classList.remove('open');
@@ -703,16 +745,17 @@
             });
 
             // Actualiza el estado y el texto del botón
-            if (isCollapsed) {
-                toggleAllBtn.dataset.state = 'expanded';
+            if (shouldExpand) {
+                toggleAllBtn.dataset.state = 'collapsed';
                 icon.className = 'fa-solid fa-compress-arrows-alt';
                 text.textContent = 'Colapsar Todo';
             } else {
-                toggleAllBtn.dataset.state = 'collapsed';
+                toggleAllBtn.dataset.state = 'expanded';
                 icon.className = 'fa-solid fa-expand-arrows-alt';
                 text.textContent = 'Expandir Todo';
             }
         });
+
         // --- Lógica para el Modo Oscuro (sin cambios) ---
         function applyTheme(theme) {
             if (theme === 'dark') {
@@ -724,10 +767,12 @@
             }
         }
 
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const savedTheme = localStorage.getItem('theme');
-
-        applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        } else {
+            applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        }
 
         themeToggle.addEventListener('change', () => {
             const newTheme = themeToggle.checked ? 'dark' : 'light';
