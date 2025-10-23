@@ -55,7 +55,7 @@ int main()
 
 	string resultado; // Cadena con el resultado de la codificación
 
- 
+    cout << "Introduzca la secuencia:" << endl;
 	cin >> actual;	// Lectura anticipada
 
 	anterior = actual;
