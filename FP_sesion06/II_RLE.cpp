@@ -1,77 +1,98 @@
 /***************************************************************************/
-// FUNDAMENTOS DE PROGRAMACION
+/***************************************************************************/
+// FUNDAMENTOS DE PROGRAMACIÓN
 //
-// MARIO MARTINEZ CALLEJON
+// (C) FRANCISCO JOSÉ CORTIJO BON
+// DEPARTAMENTO DE CIENCIAS DE LA COMPUTACIÓN E INTELIGENCIA ARTIFICIAL
 //
-// SESION 06
+// RELACIÓN DE PROBLEMAS 2
+//
 /*
-    Programa que realiza una codificación básica de una secuencia de 
-    caracteres. Lee una secuencia terminada en '*' y la procesa para 
-    mostrar el número de veces que un carácter aparece de forma 
-    consecutiva, seguido del propio carácter.
+	El método RLE (Run Length Encoding) codifica una secuencia de datos
+	formada por series de valores idénticos consecutivos como una secuencia de
+	parejas de números(valor de la secuencia y número de veces que se repite).
 
-    Entradas: una secuencia de caracteres que debe terminar con '*'.
-    Salidas:  la secuencia codificada.
+	Este programa lee una secuencia de números naturales (terminada con -1) y
+	la codifica mediante el método RLE.
+
+	La lectura no está etiquetada, por lo que es aconsejable realizarla con
+	redirección de entrada, tomando los datos de un fichero de texto.
+
+	ALGORITMO:
+
+		Leer actual
+		anterior = actual
+
+		Mientras que actual no sea TERMINADOR
+
+			Leer actual
+
+			Si son iguales anterior y actual
+				incrementar la longitud de la secuencia actual
+			si no
+				"Imprimir" el anterior junto con la longitud actual
+					y resetear el contador de la longitud actual
+
+				anterior = actual
+
 */
+/***************************************************************************/
 /***************************************************************************/
 
 #include <iostream>
-#include <string>
-
 using namespace std;
 
-/***************************************************************************/
-/***************************************************************************/
+int main()
+{
+	const char TERMINADOR = '*';
 
-int main() {
+	char actual;   	// número leido, en proceso
+	char anterior; 	// número inmediantamente anterior al leido
+	int iguales_hasta_ahora;  // número de valores iguales
 
-    //Entrada
-    string secuencia_original;
-    do {
-        cout << "Introduzca una secuencia de caracteres que termine con *: ";
-        getline(cin , secuencia_original);
+	bool continuar; // Determina si debe realizarse una nueva iteración
+					// (solo si el dato leido no es es TERMINADOR)
 
-        //Si no termina en '*' se pide otra secuencia
-        if (secuencia_original.at(secuencia_original.length() - 1) != '*') {
-                cout << "Introduzca una secuencia valida." << endl;
-            }  
-    } while (secuencia_original.at(secuencia_original.length() - 1) != '*');
+	string resultado; // Cadena con el resultado de la codificación
 
-    //Cálculos
-    string secuencia_final; //Secuencia procesada
-    char char_siguiente;
-    char char_actual;
-    int contador_char;  //Contador de caracteres iguales
+ 
+	cin >> actual;	// Lectura anticipada
 
-    string secuencia_limpia = "";   //Se eliminan los espacios
-    for (int i = 0; secuencia_original.at(i) != '*'; i++) {
-        if (secuencia_original.at(i) != ' ') {
-            secuencia_limpia += secuencia_original.at(i);
-        }
-    }
-    secuencia_limpia += "*";
+	anterior = actual;
+	iguales_hasta_ahora = 0; // Podría ser TERMINADOR
 
-    contador_char = 1;
-    for (int i = 0; secuencia_limpia.at(i) != '*'; i++) {  
-        //Continuar hasta que se llegue al '*'
-        char_actual = secuencia_limpia.at(i);
-        char_siguiente = secuencia_limpia.at(i + 1);
+	continuar = (actual != TERMINADOR);
 
-        if (char_actual == char_siguiente) {
-            //Si los char son iguales aumentar el contador
-            contador_char++;    
-        } else {
-            //Si son distintos, se añade a la secuencia y el contador reinicia
-            secuencia_final += to_string(contador_char) + char_actual + " ";
-            contador_char = 1;  
-        }
-    }   
+	while (continuar) {
 
-    //Salida
-    cout << "La secuencia procesada es: " << secuencia_final << endl;
+		if (actual == anterior) iguales_hasta_ahora++; // Continua la serie
+		else {
 
-    return 0;
+            // Montar pareja: num.veces - valor
+			resultado += "("+to_string(iguales_hasta_ahora) + "," + 
+			              anterior + ") ";
+
+			iguales_hasta_ahora = 1; // Empezar una nueva serie
+		}
+
+        anterior = actual; // Preparar siguiente paso
+
+
+		// Nueva lectura
+
+    	cin >> actual; // Lectura anticipada
+		continuar = (actual != TERMINADOR);
+	}
+
+	// Considerar la última pareja: num.veces - valor
+
+    if (iguales_hasta_ahora != 0)
+     	resultado += "("+to_string(iguales_hasta_ahora) + "," + 
+			           anterior + ") ";
+
+
+	// Salida
+    cout << resultado << endl;
+
+	return 0;
 }
-
-/***************************************************************************/
-/***************************************************************************/
