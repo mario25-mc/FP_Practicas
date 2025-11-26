@@ -72,7 +72,7 @@ public:
 
     // Consulta la base de la secuencia.
     // Devuelve: el valor de la base.
-    int GetBase() const {
+    int GetBase() {
         return base;
     }
 
@@ -88,7 +88,7 @@ public:
 
     // Calcula y devuelve la longitud de la secuencia.
     // Devuelve: el número de términos en la secuencia.
-    int GetLongitud() const {
+    int GetLongitud() {
         int longitud = 1;
         int actual = base;
 
@@ -104,7 +104,7 @@ public:
     // Parámetros:
     //   pos: la posición del término a obtener (0 es la base).
     // Devuelve: el valor del término en la posición dada.
-    int GetTermino(int pos) const {
+    int GetTermino(int pos){
         int termino = base;
         for (int i = 0; i < pos; ++i) {
             termino = SiguienteCollatz(termino);
@@ -113,7 +113,7 @@ public:
     }
 
     // Imprime la secuencia completa de Collatz en la consola.
-    void Imprimir() const {
+    void Imprimir(){
         cout << "\tCollatz(" << base << ") = {";
 
         int actual = base;
