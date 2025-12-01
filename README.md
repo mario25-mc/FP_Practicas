@@ -6,9 +6,9 @@ Este repositorio contiene las prácticas realizadas durante mi formación en **F
 
 ## 📂 Estructura del repositorio
 
-Cada carpeta corresponde a una práctica distinta, con su propio código fuente, documentación y recursos asociados.
+Cada carpeta corresponde a una práctica distinta, con su propio código fuente. Dentro de cada archivo se explica el ejercicio que resuelve y un breve resumen del funcionamiento del mismo.
 
-> ⚙️ El contenido puede incluye únicamente ejercicios de C++
+> ⚙️ El contenido incluye únicamente ejercicios de C++
 
 ---
 
@@ -30,11 +30,10 @@ Cada carpeta corresponde a una práctica distinta, con su propio código fuente,
 
 - 🔗 [Mi perfil de GitHub](https://github.com/mario25-mc)
 - 🧱 [Repositorio FP_Practicas](https://github.com/mario25-mc/FP_Practicas)
-- 🌍 [Página web del proyecto (GitHub Pages)](https://mario25-mc.github.io/FP_Practicas/) *(si la activas)*
+- 🌍 [Página web del proyecto (GitHub Pages)](https://mario25-mc.github.io/FP_Practicas/) 
 
 ## 🧩 Tecnologías utilizadas
 
 - C++ 
 - Git y GitHub  
-- Visual Studio Code  
-- Bash
+- Visual Studio Code
